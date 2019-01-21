@@ -9,9 +9,9 @@ namespace Ollert.DataAccess.Entitites
     {
         public virtual int Id { get; set; }
 
-        public DateTime CreationDate { get; set; }
+        public virtual DateTime CreationDate { get; set; }
 
-        public DateTime ModificationDate { get; set; }
+        public virtual DateTime ModificationDate { get; set; }
 
         protected Entity()
         {
