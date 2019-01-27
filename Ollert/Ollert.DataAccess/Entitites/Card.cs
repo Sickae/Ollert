@@ -8,8 +8,8 @@ namespace Ollert.DataAccess.Entitites
 
         public virtual string Description { get; set; }
 
-        public virtual IList<Label> Labels { get; set; }
+        public virtual IEnumerable<Label> Labels { get; set; }
 
-        public virtual IList<Comment> Comments { get; set; }
+        public virtual IEnumerable<Comment> Comments { get; set; }
     }
 }

@@ -6,6 +6,6 @@ namespace Ollert.DataAccess.Entitites
     {
         public virtual string Name { get; set; }
 
-        public virtual IList<Card> Cards { get; set; }
+        public virtual IEnumerable<Card> Cards { get; set; }
     }
 }

@@ -9,6 +9,6 @@ namespace Ollert.DataAccess.Entitites
 
         public virtual BoardType Type { get; set; }
 
-        public virtual IList<CardList> CardLists { get; set; }
+        public virtual IEnumerable<CardList> CardLists { get; set; }
     }
 }
