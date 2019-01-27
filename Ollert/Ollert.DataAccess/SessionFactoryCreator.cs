@@ -60,12 +60,16 @@ namespace Ollert.DataAccess
                     .Conventions.Add<NotNullConvention>()
                     .Conventions.Add<DateConvention>()
                     .Conventions.Add<CustomHasManyConvention>()
-                    .Conventions.Add<CustomReferenceConvention>()
                     .Conventions.Add<CustomHasManyToManyConvention>()
+                    .Conventions.Add<CustomReferenceConvention>()
                     .Conventions.Add<PrimaryKeySequenceConvention>()
                     .Conventions.Add<EnumConvention>()
                     .OverrideAll(DropPropertiesWithoutSetter)
                     .OverrideAll(DropProperties<IgnoreAttribute>)
+                    .Override<Board>(map => map.HasMany(x => x.CardLists).AsSet())
+                    .Override<CardList>(map => map.HasMany(x => x.Cards).AsSet())
+                    .Override<Card>(map => map.HasMany(x => x.Labels).AsSet())
+                    .Override<Card>(map => map.HasMany(x => x.Comments).AsSet())
             ));
 
             var cfg = config.BuildConfiguration();
@@ -233,7 +237,7 @@ namespace Ollert.DataAccess
         }
 
         /// <summary>
-        /// N:1 kapcsolatokhoz konvenció
+        /// N:1 kapcsolatokhoz referencia konvenció
         /// </summary>
         private class CustomReferenceConvention : IReferenceConvention
         {
@@ -334,13 +338,8 @@ namespace Ollert.DataAccess
 
                 if (Directory.Exists(outputFolder))
                 {
-                    //var script = new List<string>(config.GenerateSchemaUpdateScript(new PostgreSQL83Dialect(),
-                    //    new DatabaseMetadata(database.BuildSessionFactory().OpenSession().Connection, new PostgreSQL83Dialect())));
-
-                    var dialect = new PostgreSQL83Dialect();
-                    var dbmeta = new DatabaseMetadata(database.BuildSessionFactory().OpenSession().Connection, dialect);
-                    var asd = config.GenerateSchemaUpdateScript(dialect, dbmeta);
-                    var script = new List<string>(asd);
+                    var script = new List<string>(config.GenerateSchemaUpdateScript(new PostgreSQL83Dialect(),
+                        new DatabaseMetadata(database.BuildSessionFactory().OpenSession().Connection, new PostgreSQL83Dialect())));
 
                     File.WriteAllText(Path.Combine(outputFolder, "_UpdateSchema.sql"), string.Join(";" + System.Environment.NewLine,
                         script.Concat(new[] { "" })));
