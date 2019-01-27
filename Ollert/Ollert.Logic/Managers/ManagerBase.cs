@@ -1,12 +1,15 @@
-﻿using NHibernate;
+﻿using AutoMapper;
+using NHibernate;
 using NHibernate.Exceptions;
 using Npgsql;
 using Ollert.DataAccess.Entitites;
+using Ollert.Logic.DTOs;
 using Ollert.Logic.Helpers;
 using Ollert.Logic.Interfaces;
 using Ollert.Logic.Managers.Interfaces;
 using Serilog;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -15,10 +18,10 @@ using System.Linq.Expressions;
 namespace Ollert.Logic.Managers
 {
     /// <summary>
-    /// T entitáshoz manager ősosztály
+    /// TEntity entitáshoz manager ősosztály
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    public abstract class ManagerBase<T> : ManagerBase, IManagerBase<T> where T : Entity
+    /// <typeparam name="TEntity"></typeparam>
+    public abstract class ManagerBase<TEntity, TDto> : ManagerBase, IManagerBase<TEntity, TDto> where TEntity : Entity where TDto : DTOBase
     {
         public ManagerBase(ISession session, IAppContext appContext) : base(session, appContext)
         { }
@@ -29,7 +32,7 @@ namespace Ollert.Logic.Managers
             {
                 InTransaction(() =>
                 {
-                    var entity = _session.Get<T>(id);
+                    var entity = _session.Get<TEntity>(id);
                     if (entity == null)
                     {
                         Log.Logger.Error($"Null entity with id {id} during Delete.");
@@ -72,7 +75,7 @@ namespace Ollert.Logic.Managers
                 {
                     foreach (var id in ids)
                     {
-                        var entity = _session.Get<T>(id);
+                        var entity = _session.Get<TEntity>(id);
                         if (entity == null)
                         {
                             Log.Logger.Error($"Null entity with id {id} during Delete.");
@@ -103,17 +106,17 @@ namespace Ollert.Logic.Managers
             }
         }
 
-        public T Get(int id)
+        public TDto Get(int id)
         {
-            return _session.Get<T>(id);
+            return Mapper.Map<TEntity, TDto>(_session.Get<TEntity>(id));
         }
 
-        public IList<T> Get(IList<int> ids)
+        public IList<TDto> Get(IList<int> ids)
         {
             if (ids == null)
             {
                 Log.Logger.Error("Null id list during Delete.");
-                return new List<T>();
+                return new List<TDto>();
             }
 
             var list = ids.Select(Get).ToList();
@@ -122,23 +125,29 @@ namespace Ollert.Logic.Managers
             return list;
         }
 
-        public IList<T> GetAll()
+        public IList<TDto> GetAll()
         {
-            return _session.QueryOver<T>().List();
+            return _session.QueryOver<TDto>().List();
         }
 
-        public IList<T> GetAll(Expression<Func<T, bool>> expression)
+        public IList<TDto> GetAll(Expression<Func<TDto, bool>> expression)
         {
             if (expression == null)
             {
                 Log.Logger.Error("Null expression during GetAll");
-                return new List<T>();
+                return new List<TDto>();
             }
 
-            return _session.QueryOver<T>().Where(expression).List();
+            return _session.QueryOver<TDto>().Where(expression).List();
         }
 
-        public int Save(T entity)
+        public virtual int Save(TDto dto)
+        {
+            var entity = Mapper.Map<TDto, TEntity>(dto);
+            return Save(entity);
+        }
+
+        protected int Save(TEntity entity)
         {
             if (entity == null)
             {
@@ -163,7 +172,7 @@ namespace Ollert.Logic.Managers
             }
         }
 
-        protected virtual void OnDeleting(T entity)
+        protected virtual void OnDeleting(TEntity entity)
         {
 
         }

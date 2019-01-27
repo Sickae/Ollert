@@ -1,17 +1,18 @@
 ﻿using Ollert.DataAccess.Entitites;
+using Ollert.Logic.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 
 namespace Ollert.Logic.Managers.Interfaces
 {
-    public interface IManagerBase<T> : IManagerBase where T : Entity
+    public interface IManagerBase<T, TDto> : IManagerBase where T : Entity where TDto : DTOBase
     {
-        T Get(int id);
-        IList<T> Get(IList<int> ids);
-        IList<T> GetAll();
-        IList<T> GetAll(Expression<Func<T, bool>> expression);
-        int Save(T entity);
+        TDto Get(int id);
+        IList<TDto> Get(IList<int> ids);
+        IList<TDto> GetAll();
+        IList<TDto> GetAll(Expression<Func<TDto, bool>> expression);
+        int Save(TDto dto);
         void Delete(int id);
         void Delete(IList<int> ids);
     }
