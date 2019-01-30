@@ -9,11 +9,9 @@ using Ollert.Logic.Interfaces;
 using Ollert.Logic.Managers.Interfaces;
 using Serilog;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Linq.Expressions;
 
 namespace Ollert.Logic.Managers
 {
@@ -127,18 +125,9 @@ namespace Ollert.Logic.Managers
 
         public IList<TDto> GetAll()
         {
-            return _session.QueryOver<TDto>().List();
-        }
-
-        public IList<TDto> GetAll(Expression<Func<TDto, bool>> expression)
-        {
-            if (expression == null)
-            {
-                Log.Logger.Error("Null expression during GetAll");
-                return new List<TDto>();
-            }
-
-            return _session.QueryOver<TDto>().Where(expression).List();
+            var entities = _session.QueryOver<TEntity>().List();
+            var dtos = Mapper.Map<IList<TEntity>, IList<TDto>>(entities);
+            return dtos;
         }
 
         public virtual int Save(TDto dto)
@@ -178,7 +167,7 @@ namespace Ollert.Logic.Managers
         }
     }
 
-    public abstract class ManagerBase : IManagerBase
+    public abstract class ManagerBase
     {
         protected readonly ISession _session;
         protected readonly IAppContext _appContext;
