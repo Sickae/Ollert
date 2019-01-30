@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Ollert.Logic.Managers.Interfaces
 {
-    public interface IManagerBase<T, TDto> where T : Entity where TDto : DTOBase
+    public interface IManagerBase<T, TDto> : IManagerBase where T : Entity where TDto : DTOBase
     {
         TDto Get(int id);
         IList<TDto> Get(IList<int> ids);
@@ -13,4 +13,6 @@ namespace Ollert.Logic.Managers.Interfaces
         void Delete(int id);
         void Delete(IList<int> ids);
     }
+
+    public interface IManagerBase { }
 }
