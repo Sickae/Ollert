@@ -9,8 +9,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using NHibernate;
 using Ollert.DataAccess;
+using Ollert.DataAccess.Entitites;
 using Ollert.Logic.DTOs.Mappings;
 using Ollert.Logic.Interfaces;
+using Ollert.Logic.Managers;
+using Ollert.Logic.Managers.Interfaces;
 using Ollert.Web.Infrastructure.Log;
 using Ollert.Web.Models.Mappings;
 using Serilog.Core.Enrichers;
@@ -76,12 +79,20 @@ namespace Ollert
                 opt.SupportedUICultures = supportedCultures;
             });
 
+            // IOC
             services.AddSingleton(SessionFactoryCreator.BuildConfiguration(_configuration.GetConnectionString("ollert"))
                 .BuildSessionFactory());
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.AddScoped<IAppContext, Web.Infrastructure.AppContext>();
             services.AddScoped(x => x.GetServices<ISessionFactory>().First().OpenSession());
+
+            // manager osztályok
+            services.AddScoped<IBoardManager, BoardManager>();
+            services.AddScoped<ICardListManager, CardListManager>();
+            services.AddScoped<ICardManager, CardManager>();
+            services.AddScoped<ICommentManager, CommentManager>();
+            services.AddScoped<ILabelManager, LabelManager>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
