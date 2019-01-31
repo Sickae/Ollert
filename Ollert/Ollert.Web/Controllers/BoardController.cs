@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Ollert.DataAccess.Enums;
 using Ollert.Logic.DTOs;
 using Ollert.Logic.Managers.Interfaces;
@@ -27,7 +28,8 @@ namespace Ollert.Web.Controllers
 
         public IActionResult BoardList()
         {
-            var vm = new BoardViewModel();
+            var boards = _boardManager.GetAll();
+            var vm = new BoardListViewModel { Boards = boards };
             SetTitle("Táblák");
             return View(vm);
         }
@@ -46,6 +48,7 @@ namespace Ollert.Web.Controllers
         // TODO VERY UGLY PLEASE CHANGE IT!!!!
         public IActionResult Test()
         {
+            var rnd = new System.Random();
             var boardIds = new List<int>();
 
             for (int i = 0; i < 5; i++)
@@ -89,7 +92,7 @@ namespace Ollert.Web.Controllers
                 var board = new BoardDTO
                 {
                     CardLists = new List<CardListDTO>(),
-                    Type = BoardType.Public,
+                    Type = (BoardType)rnd.Next(0, 2),
                     Name = $"Test Board #{i + 1}"
                 };
 

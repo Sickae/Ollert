@@ -1,3 +1,41 @@
-﻿@model BoardViewModel
+﻿@using Ollert.DataAccess.Enums
 
-<h2>asd</h2>
+@model BoardListViewModel
+<div class="row board-list-container">
+    @foreach (var boardGroup in Model.Boards.GroupBy(x => x.Type))
+    {
+        <div class="board-list">
+            <div class="board-list-title">
+                @switch (boardGroup.Key)
+                {
+                    case BoardType.Public:
+                    {
+                        <span class="fas fa-globe"></span>
+                        <label>Publikus</label>
+                        break;
+                    }
+                    case BoardType.Private:
+                    {
+                        <span class="fas fa-lock"></span>
+                        <label>Privát</label>
+                        break;
+                    }
+                }
+            </div>
+            <ul>
+                @foreach (var board in boardGroup)
+                {
+                    <li>
+                        <div class="board-list-item">
+                            <a href="@Url.Action(nameof(BoardController.Board), "Board", new { id = board.Id })">
+                                <div class="board-title">
+                                    @board.Name
+                                </div>
+                            </a>
+                        </div>
+                    </li>
+                }
+            </ul>
+        </div>
+    }
+</div>
