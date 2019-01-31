@@ -171,6 +171,10 @@ html {
     transition-duration: .5s; 
 }
 
+.board-list-item-new {
+    background-color: #a8b7c1;
+}
+
 .board-list-item > a {
     text-decoration: none;
 }
@@ -179,12 +183,20 @@ html {
     background-color: #4c89b5;
 }
 
+.board-list-item-new:hover {
+    background-color: #bdc4c9;
+}
+
 .board-list-item:hover .board-title {
     font-size: 24px;
 }
 
 .board-list-item:active {
     background-color: #59aae5;
+}
+
+.board-list-item-new:active {
+    background-color: #c1d1dd;
 }
 
 .board-title {
@@ -202,4 +214,10 @@ html {
     transition-property: font-size;
     transition-duration: .5s;
     transition-delay: .2s;
+}
+
+.board-new {
+    transition-property: none;
+    font-size: 16px !important;
+    color: #2e4e60;
 }
