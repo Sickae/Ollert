@@ -25,24 +25,23 @@
             <div class="nav-title">@ViewData["Title"]</div>
             <ul class="nav navbar-nav navbar-left">
                 <li class="nav-item">
-                    <button class="btn btn-nav-item">
+                    <a class="btn btn-nav-item" href="@Url.Action(nameof(BoardController.BoardList), "Board")">
                         <span class="nav-icon fas fa-home"></span>
-                        @Html.ActionLink("", nameof(BoardController.BoardList), "Board")
-                    </button>
+                    </a>
                 </li>
                 <li class="nav-item">
-                    <button class="btn btn-nav-item">
+                    <a class="btn btn-nav-item" href="@Url.Action(nameof(BoardController.BoardList), "Board")">
                         <span class="nav-icon fas fa-columns"></span>
-                        @Html.ActionLink("Táblák", nameof(BoardController.BoardList), "Board")
-                    </button>
+                        Táblák
+                    </a>
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li class="nav-item">
-                    <button class="btn btn-nav-item">
+                    <a class="btn btn-nav-item" href="@Url.Action(nameof(BoardController.New), "Board")">
                         <span class="nav-icon fas fa-plus"></span>
-                        @Html.ActionLink("Új tábla", nameof(BoardController.New), "Board")
-                    </button>
+                        Új tábla
+                    </a>
                 </li>
             </ul>
         </div>
@@ -50,7 +49,7 @@
 
     <partial name="_CookieConsentPartial" />
 
-    <div class="container body-content">
+    <div class="body-content">
         @RenderBody()
     </div>
 

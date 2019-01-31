@@ -74,17 +74,17 @@ body {
     padding: 5px 10px 5px 10px !important;
 }
 
-.btn-nav-item > a {
-    color: #fff;
+.btn-nav-item {
+    color: #fff !important;
     font-weight: 700;
 }
 
 .btn-nav-item:hover {
-    background-color: #469cdb;
+    background-color: #469cdb !important;
 }
 
 .btn-nav-item:active {
-    background-color: #2e93db;
+    background-color: #2e93db !important;
 }
 
 .nav-icon {
