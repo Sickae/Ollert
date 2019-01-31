@@ -24,4 +24,10 @@
     <ProjectReference Include="..\Ollert.Logic\Ollert.Logic.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="Views\_ViewStart.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+  </ItemGroup>
+
 </Project>

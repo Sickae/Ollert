@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using Ollert.Web.Controllers
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -7,6 +9,7 @@
 
     <environment include="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+        <link rel="stylesheet" href="~/lib/font-awesome/css/all.css" />
         <link rel="stylesheet" href="~/css/site.css" />
     </environment>
     <environment exclude="Development">
@@ -18,23 +21,30 @@
 </head>
 <body>
     <nav class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a asp-page="/Index" class="navbar-brand">Ollert</a>
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li><a asp-page="/Index">Home</a></li>
-                    <li><a asp-page="/About">About</a></li>
-                    <li><a asp-page="/Contact">Contact</a></li>
-                </ul>
-            </div>
+        <div class="navbar-collapse collapse">
+            <div class="nav-title">@ViewData["Title"]</div>
+            <ul class="nav navbar-nav navbar-left">
+                <li class="nav-item">
+                    <button class="btn btn-nav-item">
+                        <span class="nav-icon fas fa-home"></span>
+                        @Html.ActionLink("", nameof(BoardController.BoardList), "Board")
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button class="btn btn-nav-item">
+                        <span class="nav-icon fas fa-columns"></span>
+                        @Html.ActionLink("Táblák", nameof(BoardController.BoardList), "Board")
+                    </button>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li class="nav-item">
+                    <button class="btn btn-nav-item">
+                        <span class="nav-icon fas fa-plus"></span>
+                        @Html.ActionLink("Új tábla", nameof(BoardController.New), "Board")
+                    </button>
+                </li>
+            </ul>
         </div>
     </nav>
 
@@ -42,15 +52,16 @@
 
     <div class="container body-content">
         @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; 2018 - Ollert</p>
-        </footer>
     </div>
+
+    <footer class="footer">
+        <p>&copy; 2019 - Ollert</p>
+    </footer>
 
     <environment include="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+        <script src="~/lib/jquery/dist/jquery.js"></script>
         <script src="~/js/site.js" asp-append-version="true"></script>
     </environment>
     <environment exclude="Development">

@@ -9,7 +9,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using NHibernate;
 using Ollert.DataAccess;
-using Ollert.DataAccess.Entitites;
 using Ollert.Logic.DTOs.Mappings;
 using Ollert.Logic.Interfaces;
 using Ollert.Logic.Managers;
@@ -128,7 +127,7 @@ namespace Ollert
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{controller=Board}/{action=BoardList}/{id?}");
             });
 
             // ISO-8859-2 támogatás

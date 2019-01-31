@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace Ollert.Web.Controllers
 {
-    public class BoardController : Controller
+    public class BoardController : ControllerBase
     {
         private readonly IBoardManager _boardManager;
         private readonly ICardListManager _cardListManager;
@@ -16,7 +16,7 @@ namespace Ollert.Web.Controllers
         private readonly ICommentManager _commentManager;
 
         public BoardController(IBoardManager boardManager, ICardListManager cardListManager, ICardManager cardManager,
-            ILabelManager labelManager, ICommentManager commentManager)
+            ILabelManager labelManager, ICommentManager commentManager) : base(boardManager)
         {
             _boardManager = boardManager;
             _cardListManager = cardListManager;
@@ -28,9 +28,21 @@ namespace Ollert.Web.Controllers
         public IActionResult BoardList()
         {
             var vm = new BoardViewModel();
+            SetTitle("Táblák");
             return View(vm);
         }
 
+        public IActionResult New()
+        {
+            return Board(0);
+        }
+
+        public IActionResult Board(int id)
+        {
+            return View(nameof(Board));
+        }
+
+        #region DELETE THIS
         // TODO VERY UGLY PLEASE CHANGE IT!!!!
         public IActionResult Test()
         {
@@ -105,5 +117,6 @@ namespace Ollert.Web.Controllers
             var b = _boardManager.Get(id);
             return Json(b);
         }
+        #endregion
     }
 }
