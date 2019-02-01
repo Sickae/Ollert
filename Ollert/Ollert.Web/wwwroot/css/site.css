@@ -8,7 +8,7 @@ body {
 }
 
 html {
-    min-height: 100%;
+    min-height: 99%;
     position: relative;
 }
 
@@ -172,7 +172,7 @@ html {
 }
 
 .board-list-item-new {
-    background-color: #a8b7c1;
+    background-color: #bdc4c9;
 }
 
 .board-list-item > a {
@@ -184,11 +184,15 @@ html {
 }
 
 .board-list-item-new:hover {
-    background-color: #bdc4c9;
+    background-color: #a8b7c1;
 }
 
 .board-list-item:hover .board-title {
     font-size: 24px;
+}
+
+.board-list-item-new:hover .board-new {
+    color: #2e4e60;
 }
 
 .board-list-item:active {
@@ -196,7 +200,7 @@ html {
 }
 
 .board-list-item-new:active {
-    background-color: #c1d1dd;
+    background-color: #98a3aa;
 }
 
 .board-title {
@@ -217,7 +221,8 @@ html {
 }
 
 .board-new {
-    transition-property: none;
+    transition-property: color;
+    transition-delay: 0s;
     font-size: 16px !important;
-    color: #2e4e60;
+    color: #677d89;
 }
