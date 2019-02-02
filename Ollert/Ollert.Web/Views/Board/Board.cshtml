@@ -18,24 +18,31 @@
                     @foreach (var card in cardList.Cards)
                     {
                         <div class="cardlist-card">
-                            <div class="cardlist-card-icon">
+                            <div class="cardlist-card-icon cardlist-card-icon-edit">
                                 <a href="#test">
                                     <span class="fas fa-pencil-alt"></span>
                                 </a>
                             </div>
                             @card.Name
+                            @if (card.Comments.Count > 0)
+                            {
+                                <div class="cardlist-card-icon cardlist-card-icon-comment">
+                                    <span class="fas fa-comment"></span>
+                                    @card.Comments.Count
+                                </div>
+                            }
                         </div>
                     }
                 </div>
                 <a href="#">
                     <div class="cardlist-card-new">
                         <span class="fas fa-plus"></span>
-                        Új kártya hozzáadása....
+                        Új kártya hozzáadása
                     </div>
                 </a>
             </li>
         }
-
+         @* TESZT *@
         <li>
             <div class="cardlist">
                 <div class="cardlist-title">
@@ -50,9 +57,17 @@
             <a href="#">
                 <div class="cardlist-card-new">
                     <span class="fas fa-plus"></span>
-                    Új kártya hozzáadása....
+                    Új kártya hozzáadása
                 </div>
             </a>
+        </li>
+        @* TESZT *@
+
+        <li>
+            <div class="cardlist cardlist-new">
+                <span class="fas fa-plus"></span>
+                Új lista hozzáadása
+            </div>
         </li>
     </ul>
 </div>

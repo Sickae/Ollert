@@ -257,10 +257,27 @@ html {
 .cardlist-title {
     font-weight: 700;
     margin-bottom: 10px;
+    cursor: pointer;
 }
 
 .cardlist-title-menu {
     float: right;
+}
+
+.cardlist-new {
+    background-color: #e0e0e0;
+    color: #898f94;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.cardlist-new > span {
+    margin-right: 5px;
+}
+
+.cardlist-new:hover {
+    background-color: #cccfd1;
+    color: #17394d;
 }
 
 .cardlist-card-new {
@@ -306,18 +323,21 @@ html {
 }
 
 .cardlist-card-icon {
-    position: absolute;
-    right: 4px;
-    top: 2px;
     font-size: 11px;
     color: #83898e;
+}
+
+.cardlist-card-icon-edit {
+    position: absolute;
     width: 26px;
     height: 26px;
+    right: 4px;
+    top: 2px;
     border-radius: 3px;
     opacity: 0;
 }
 
-.cardlist-card-icon span {
+.cardlist-card-icon-edit span {
     position: relative;
     text-align: center;
     height: 100%;
@@ -326,10 +346,18 @@ html {
     vertical-align: middle;
 }
 
-.cardlist-card-icon:hover {
+.cardlist-card-icon-edit:hover {
     background-color: #e0e0e0;
 }
 
-.cardlist-card-icon:active {
+.cardlist-card-icon-edit:active {
     background-color: #d0d0d0;
+}
+
+.cardlist-card-icon-comment {
+    padding: 4px 0 2px 5px;
+}
+
+.cardlist-card-icon-comment > span {
+    margin-right: 3px;
 }
