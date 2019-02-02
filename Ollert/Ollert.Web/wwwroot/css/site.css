@@ -113,9 +113,8 @@ html {
     vertical-align: middle;
     color: #aad1ed;
     font-weight: 700;
-    font-size: 20px;
-    margin-top: 4px;
-    letter-spacing: .5pt;
+    font-size: 18px;
+    line-height: 40px;
 }
 
 /* BoardList stylings */
