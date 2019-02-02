@@ -1,0 +1,58 @@
+﻿@model BoardViewModel
+
+<div class="row cardlist-list">
+    <ul>
+        @foreach (var cardList in Model.CardLists)
+        {
+            <li>
+                <div class="cardlist">
+                    <div class="cardlist-title">
+                        @cardList.Name
+                        <div class="cardlist-title-menu">
+                            <a href="#">
+                                <span class="fas fa-ellipsis-h"></span>
+                            </a>
+                        </div>
+                    </div>
+
+                    @foreach (var card in cardList.Cards)
+                    {
+                        <div class="cardlist-card">
+                            <div class="cardlist-card-icon">
+                                <a href="#test">
+                                    <span class="fas fa-pencil-alt"></span>
+                                </a>
+                            </div>
+                            @card.Name
+                        </div>
+                    }
+                </div>
+                <a href="#">
+                    <div class="cardlist-card-new">
+                        <span class="fas fa-plus"></span>
+                        Új kártya hozzáadása....
+                    </div>
+                </a>
+            </li>
+        }
+
+        <li>
+            <div class="cardlist">
+                <div class="cardlist-title">
+                    DELETE THIS
+                    <div class="cardlist-title-menu">
+                        <a href="#">
+                            <span class="fas fa-ellipsis-h"></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <a href="#">
+                <div class="cardlist-card-new">
+                    <span class="fas fa-plus"></span>
+                    Új kártya hozzáadása....
+                </div>
+            </a>
+        </li>
+    </ul>
+</div>

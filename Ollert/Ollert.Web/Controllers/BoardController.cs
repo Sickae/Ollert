@@ -41,7 +41,10 @@ namespace Ollert.Web.Controllers
 
         public IActionResult Board(int id)
         {
-            return View(nameof(Board));
+            var board = _boardManager.Get(id);
+            var vm = Mapper.Map<BoardViewModel>(board);
+            SetTitle(board.Name);
+            return View(nameof(Board), vm);
         }
 
         #region DELETE THIS

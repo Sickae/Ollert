@@ -219,3 +219,117 @@ html {
     font-size: 16px !important;
     color: #677d89;
 }
+
+/* Board stylings */
+
+.cardlist-list {
+    min-width: 100%;
+    position: relative;
+    margin-top: 2%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.cardlist-list > ul {
+    padding: 0;
+    position: relative;
+    top: 0px;
+}
+
+.cardlist-list li {
+    display: inline-grid;
+    margin-right: 30px;
+    width: 250px;
+}
+
+.cardlist-list a {
+    text-decoration: none;
+    color: #83898e !important;
+}
+
+.cardlist {
+    color: #17394d;
+    background-color: #cccfd1;
+    border-radius: 5px 5px 0 0;
+    padding: 5px 10px;
+}
+
+.cardlist-title {
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.cardlist-title-menu {
+    float: right;
+}
+
+.cardlist-card-new {
+    color: #83898e;
+    background-color: #cccfd1;
+    border-radius: 0 0 5px 5px;
+    padding: 10px;
+}
+
+.cardlist-card-new > span {
+    margin-right: 5px;
+}
+
+.cardlist-card-new:hover {
+    color: #17394d;
+    background-color: #babec2;
+}
+
+.cardlist-card-new:active {
+    background-color: #a7acb1;
+}
+
+.cardlist-card {
+    position: relative;
+    background-color: #fff;
+    border-radius: 3px;
+    padding: 5px;
+    margin-bottom: 10px;
+    word-wrap: break-word;
+    cursor: pointer;
+}
+
+.cardlist-card:last-child {
+    margin-bottom: 2px;
+}
+
+.cardlist-card:hover {
+    background-color: #f0f0f0;
+}
+
+.cardlist-card:hover > .cardlist-card-icon {
+    opacity: 1;
+}
+
+.cardlist-card-icon {
+    position: absolute;
+    right: 4px;
+    top: 2px;
+    font-size: 11px;
+    color: #83898e;
+    width: 26px;
+    height: 26px;
+    border-radius: 3px;
+    opacity: 0;
+}
+
+.cardlist-card-icon span {
+    position: relative;
+    text-align: center;
+    height: 100%;
+    width: 100%;
+    line-height: 26px;
+    vertical-align: middle;
+}
+
+.cardlist-card-icon:hover {
+    background-color: #e0e0e0;
+}
+
+.cardlist-card-icon:active {
+    background-color: #d0d0d0;
+}
