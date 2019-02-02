@@ -1,6 +1,7 @@
 ﻿@using Ollert.DataAccess.Enums
 
 @model BoardListViewModel
+
 <div class="row board-list-container">
     @foreach (var boardGroup in Model.Boards.GroupBy(x => x.Type))
     {

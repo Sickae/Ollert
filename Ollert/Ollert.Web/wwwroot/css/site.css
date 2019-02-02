@@ -17,6 +17,7 @@ html {
 .body-content {
     padding-left: 15px;
     padding-right: 15px;
+    margin-bottom: 100px;
 }
 
 /* Carousel */
@@ -187,10 +188,6 @@ html {
     background-color: #a8b7c1;
 }
 
-.board-list-item:hover .board-title {
-    font-size: 24px;
-}
-
 .board-list-item-new:hover .board-new {
     color: #2e4e60;
 }
@@ -215,14 +212,11 @@ html {
     font-size: 14px;
     word-wrap: break-word;
     font-size: 16px;
-    transition-property: font-size;
-    transition-duration: .5s;
-    transition-delay: .2s;
 }
 
 .board-new {
     transition-property: color;
-    transition-delay: 0s;
+    transition-duration: .5s;
     font-size: 16px !important;
     color: #677d89;
 }
