@@ -146,6 +146,12 @@ namespace Ollert.Logic.Managers
 
             entity.ModificationDate = DateTime.UtcNow;
 
+            var cachedEntity = _session.Load<TEntity>(entity.Id);
+            if (entity.Id == cachedEntity.Id)
+            {
+                _session.Evict(cachedEntity);
+            }
+
             try
             {
                 InTransaction(() =>
