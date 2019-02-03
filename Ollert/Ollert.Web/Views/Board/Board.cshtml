@@ -1,20 +1,54 @@
 ﻿@model BoardViewModel
 
-<div class="row cardlist-list">
-    <ul>
-        @foreach (var cardList in Model.CardLists)
-        {
-            <li>
-                <div class="cardlist">
-                    <div class="cardlist-title">
-                        @cardList.Name
-                        <div class="cardlist-title-menu">
-                            <a href="#">
-                                <span class="fas fa-ellipsis-h"></span>
-                            </a>
-                        </div>
-                    </div>
+@section Scripts {
+    <script type="text/javascript">
 
+        function toggleNewCardListWindow() {
+            $('input.cardlist-new-input').val('');
+            $('.cardlist-new').toggle();
+            var inputContainer = $('.cardlist-new-input-container').slideToggle('fast');
+
+            if (inputContainer.css('display') === 'block') {
+                $('.cardlist-new-input').focus();
+            }
+        }
+
+        function addNewCard(caller) {
+            var emptyCard = $('.empty-card > .cardlist-card').clone();
+            var list = $(caller).closest('.cardlist-container').find('.cardlist-content');
+
+            list.append(emptyCard);
+            emptyCard.show();
+        }
+
+        function addNewCardList() {
+            var emptyList = $('.empty-cardlist > .cardlist-container').clone();
+            var inputContainer = $('.cardlist-new-input-container').closest('.cardlist-container');
+            var title = inputContainer.find('input.cardlist-new-input').val();
+
+            emptyList.find('.cardlist-title').text(title);
+            inputContainer.find('.cardlist-new').show();
+            inputContainer.find('.cardlist-new-input-container').hide();
+            $('.cardlist-list').append(emptyList).append(inputContainer);
+        }
+
+    </script>
+}
+
+<div class="row cardlist-list">
+    @foreach (var cardList in Model.CardLists)
+    {
+        <div class="cardlist-container">
+            <div class="cardlist-header">
+                <div class="cardlist-title">@cardList.Name</div>
+                <div class="cardlist-header-menu">
+                    <a href="#">
+                        <span class="fas fa-ellipsis-h"></span>
+                    </a>
+                </div>
+            </div>
+            <div class="cardlist-content">
+                <div class="cardlist-wrapper">
                     @foreach (var card in cardList.Cards)
                     {
                         <div class="cardlist-card">
@@ -23,8 +57,14 @@
                                     <span class="fas fa-pencil-alt"></span>
                                 </a>
                             </div>
+                            @foreach (var label in card.Labels)
+                            {
+                                <div class="cardlist-card-label-container">
+                                    <div class="cardlist-card-label" style="background-color: @label.Color"></div>
+                                </div>
+                            }
                             @card.Name
-                            @if (card.Comments.Count > 0)
+                            @if (card.Comments.Any())
                             {
                                 <div class="cardlist-card-icon cardlist-card-icon-comment">
                                     <span class="fas fa-comment"></span>
@@ -34,40 +74,58 @@
                         </div>
                     }
                 </div>
-                <a href="#">
-                    <div class="cardlist-card-new">
-                        <span class="fas fa-plus"></span>
-                        Új kártya hozzáadása
-                    </div>
-                </a>
-            </li>
-        }
-         @* TESZT *@
-        <li>
-            <div class="cardlist">
-                <div class="cardlist-title">
-                    DELETE THIS
-                    <div class="cardlist-title-menu">
-                        <a href="#">
-                            <span class="fas fa-ellipsis-h"></span>
-                        </a>
-                    </div>
-                </div>
             </div>
-            <a href="#">
-                <div class="cardlist-card-new">
-                    <span class="fas fa-plus"></span>
-                    Új kártya hozzáadása
-                </div>
-            </a>
-        </li>
-        @* TESZT *@
-
-        <li>
-            <div class="cardlist cardlist-new">
+            <div class="cardlist-card-new" onclick="addNewCard(this)">
                 <span class="fas fa-plus"></span>
-                Új lista hozzáadása
+                Új kártya hozzáadása
             </div>
-        </li>
-    </ul>
+        </div>
+    }
+
+    <div class="cardlist-container">
+        <div class="cardlist-content cardlist-new-input-container">
+            <input class="cardlist-new-input" placeholder="Cím..." />
+            <div class="cardlist-new-control">
+                <a class="btn btn-cardlist-new" onclick="addNewCardList()">Mentés</a>
+                <div class="cardlist-icon-cancel" onclick="toggleNewCardListWindow()">
+                    <span class="fas fa-times"></span>
+                </div>
+            </div>
+        </div>
+        <div class="cardlist-content cardlist-new" onclick="toggleNewCardListWindow()">
+            <span class="fas fa-plus"></span>
+            Új lista hozzáadása
+        </div>
+    </div>
+</div>
+
+<div class="helper-divs">
+    <div class="empty-card">
+        <div class="cardlist-card">
+            <div class="cardlist-card-icon cardlist-card-icon-edit">
+                <a href="#">
+                    <span class="fas fa-pencil-alt"></span>
+                </a>
+            </div>
+            Új kártya (WIP)
+        </div>
+    </div>
+
+    <div class="empty-cardlist">
+        <div class="cardlist-container">
+            <div class="cardlist-header">
+                <div class="cardlist-title"></div>
+                <div class="cardlist-header-menu">
+                    <a href="#">
+                        <span class="fas fa-ellipsis-h"></span>
+                    </a>
+                </div>
+            </div>
+            <div class="cardlist-content"></div>
+            <div class="cardlist-card-new" onclick="addNewCard(this)">
+                <span class="fas fa-plus"></span>
+                Új kártya hozzáadása
+            </div>
+        </div>
+    </div>
 </div>
