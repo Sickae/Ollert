@@ -66,10 +66,16 @@ namespace Ollert.DataAccess
                     .Conventions.Add<EnumConvention>()
                     .OverrideAll(DropPropertiesWithoutSetter)
                     .OverrideAll(DropProperties<IgnoreAttribute>)
-                    .Override<Board>(map => map.HasMany(x => x.CardLists).AsSet())
-                    .Override<CardList>(map => map.HasMany(x => x.Cards).AsSet())
-                    .Override<Card>(map => map.HasMany(x => x.Labels).AsSet())
-                    .Override<Card>(map => map.HasMany(x => x.Comments).AsSet())
+                    //.Override<Board>(map => {
+                    //    map.HasMany(x => x.CardLists).AsSet();
+                    //    map.References(x => x.CardLists).Cascade.SaveUpdate();
+                    //})
+                    //.Override<CardList>(map => {
+                    //    map.HasMany(x => x.Cards).AsSet();
+                    //    map.References(x => x.Cards).Cascade.SaveUpdate();
+                    //})
+                    //.Override<Card>(map => map.HasMany(x => x.Labels).AsSet())
+                    //.Override<Card>(map => map.HasMany(x => x.Comments).AsSet())
             ));
 
             var cfg = config.BuildConfiguration();
