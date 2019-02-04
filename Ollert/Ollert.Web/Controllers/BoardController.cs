@@ -1,8 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Ollert.DataAccess.Enums;
 using Ollert.Logic.DTOs;
-using Ollert.Logic.Managers.Interfaces;
+using Ollert.Logic.Repositories;
 using Ollert.Web.Models;
 using System.Collections.Generic;
 
@@ -10,25 +9,16 @@ namespace Ollert.Web.Controllers
 {
     public class BoardController : ControllerBase
     {
-        private readonly IBoardManager _boardManager;
-        private readonly ICardListManager _cardListManager;
-        private readonly ICardManager _cardManager;
-        private readonly ILabelManager _labelManager;
-        private readonly ICommentManager _commentManager;
+        private readonly BoardRepository _boardRepository;
 
-        public BoardController(IBoardManager boardManager, ICardListManager cardListManager, ICardManager cardManager,
-            ILabelManager labelManager, ICommentManager commentManager) : base(boardManager)
+        public BoardController(BoardRepository boardRepository)
         {
-            _boardManager = boardManager;
-            _cardListManager = cardListManager;
-            _cardManager = cardManager;
-            _labelManager = labelManager;
-            _commentManager = commentManager;
+            _boardRepository = boardRepository;
         }
 
         public IActionResult BoardList()
         {
-            var boards = _boardManager.GetAll();
+            var boards = _boardRepository.GetAll();
             var vm = new BoardListViewModel { Boards = boards };
             SetTitle("Táblák");
             return View(vm);
@@ -41,88 +31,29 @@ namespace Ollert.Web.Controllers
 
         public IActionResult Board(int id)
         {
-            var board = _boardManager.Get(id);
+            var board = _boardRepository.Get(id);
             var vm = Mapper.Map<BoardViewModel>(board);
             SetTitle(board.Name);
             return View(nameof(Board), vm);
         }
 
-        #region DELETE THIS
-        // TODO VERY UGLY PLEASE CHANGE IT!!!!
-        public IActionResult Test()
+        public IActionResult AddNewCardList(int boardId, string cardListName)
         {
-            var rnd = new System.Random();
-            var boardIds = new List<int>();
-
-            for (int i = 0; i < 5; i++)
+            var cardList = new CardListDTO
             {
-                var cardList = new CardListDTO
-                {
-                    Name = "Test card list",
-                    Cards = new List<CardDTO>()
-                };
-
-                var label = new LabelDTO
-                {
-                    Color = "#ff0000",
-                    Name = "Red test label"
-                };
-                label.Id = _labelManager.Save(label);
-
-                var comment = new CommentDTO
-                {
-                    Author = "Unknown",
-                    Text = "This is a test comment, please ignore."
-                };
-                comment.Id = _commentManager.Save(comment);
-
-                for (int k = 0; k < 3; k++)
-                {
-                    var card = new CardDTO
-                    {
-                        Description = $"Description of Test Card #{k}",
-                        Name = $"Test card #{k}",
-                        Comments = new List<CommentDTO>(),
-                        Labels = new List<LabelDTO>()
-                    };
-                    card.Labels.Add(label);
-                    card.Comments.Add(comment);
-                    card.Id = _cardManager.Save(card);
-                    cardList.Cards.Add(card);
-                }
-                cardList.Id = _cardListManager.Save(cardList);
-
-                var board = new BoardDTO
-                {
-                    CardLists = new List<CardListDTO>(),
-                    Type = (BoardType)rnd.Next(0, 2),
-                    Name = $"Test Board #{i + 1}"
-                };
-
-                board.CardLists.Add(cardList);
-                board.Id = _boardManager.Save(board);
-                boardIds.Add(board.Id);
-            }
-
-            var b = _boardManager.Get(boardIds);
-            return Json(b);
-        }
-
-        public IActionResult Test2(int id)
-        {
-            var board = _boardManager.Get(id);
-            var comment = new CommentDTO
-            {
-                Author = "Sickae",
-                Text = "This is a changed text"
+                Name = cardListName,
+                Cards = new List<CardDTO>()
             };
 
-            board.CardLists[0].Cards[0].Comments[0] = comment;
-            _boardManager.Save(board);
+            var board = _boardRepository.Get(boardId);
+            board.CardLists.Add(cardList);
+            _boardRepository.Save(board);
 
-            var b = _boardManager.Get(id);
-            return Json(b);
+            return Json(new
+            {
+                success = true,
+                id = cardList.Id
+            });
         }
-        #endregion
     }
 }

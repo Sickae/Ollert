@@ -13,12 +13,36 @@
             }
         }
 
+        function toggleNewCardWindow(caller) {
+            var activeWindow = $('.cardlist-list').find('.empty-card-input');
+
+            if (activeWindow.length > 0) {
+                activeWindow.closest('.cardlist-container').find('.cardlist-card-new').show();
+                activeWindow.remove();
+            } else {
+                var container = $(caller).closest('.cardlist-container');
+                var inputWindow = $('.empty-card-input').clone();
+                container.find('.cardlist-card-new').hide();
+                container.find('.cardlist-content').append(inputWindow);
+                inputWindow.find('.cardlist-card-name').focus();
+            }
+        }
+
         function addNewCard(caller) {
             var emptyCard = $('.empty-card > .cardlist-card').clone();
             var list = $(caller).closest('.cardlist-container').find('.cardlist-content');
+            var cardName = $(caller).closest('.empty-card-input').find('.cardlist-card-name-input').val();
+            console.log(cardName);
 
+            emptyCard.find('.cardlist-card-name').text(cardName);
             list.append(emptyCard);
+            toggleNewCardWindow();
             emptyCard.show();
+
+            $.post('@Url.Action(nameof(CardListController.AddNewCard), "CardList")', {
+                cardListId: list.data('id'),
+                cardName: cardName
+            });
         }
 
         function addNewCardList() {
@@ -30,6 +54,19 @@
             inputContainer.find('.cardlist-new').show();
             inputContainer.find('.cardlist-new-input-container').hide();
             $('.cardlist-list').append(emptyList).append(inputContainer);
+
+            $.post('@Url.Action(nameof(BoardController.AddNewCardList), "Board")', {
+                boardId: @Model.Id,
+                cardListName: title
+            }).done(function (data) {
+                var id = data.id;
+                emptyList.find('.cardlist-content').attr('data-id', id);
+            });
+        }
+
+        function resizeTextArea(textarea) {
+            $(textarea).css('height', 'auto');
+            $(textarea).css('height', textarea.scrollHeight + 'px');
         }
 
     </script>
@@ -47,35 +84,33 @@
                     </a>
                 </div>
             </div>
-            <div class="cardlist-content">
-                <div class="cardlist-wrapper">
-                    @foreach (var card in cardList.Cards)
-                    {
-                        <div class="cardlist-card">
-                            <div class="cardlist-card-icon cardlist-card-icon-edit">
-                                <a href="#test">
-                                    <span class="fas fa-pencil-alt"></span>
-                                </a>
-                            </div>
-                            @foreach (var label in card.Labels)
-                            {
-                                <div class="cardlist-card-label-container">
-                                    <div class="cardlist-card-label" style="background-color: @label.Color"></div>
-                                </div>
-                            }
-                            @card.Name
-                            @if (card.Comments.Any())
-                            {
-                                <div class="cardlist-card-icon cardlist-card-icon-comment">
-                                    <span class="fas fa-comment"></span>
-                                    @card.Comments.Count
-                                </div>
-                            }
+            <div class="cardlist-content" data-id="@cardList.Id">
+                @foreach (var card in cardList.Cards)
+                {
+                    <div class="cardlist-card">
+                        <div class="cardlist-card-icon cardlist-card-icon-edit">
+                            <a href="#test">
+                                <span class="fas fa-pencil-alt"></span>
+                            </a>
                         </div>
-                    }
-                </div>
+                        @foreach (var label in card.Labels)
+                        {
+                            <div class="cardlist-card-label-container">
+                                <div class="cardlist-card-label" style="background-color: @label.Color"></div>
+                            </div>
+                        }
+                        <div class="cardlist-card-name">@card.Name</div>
+                        @if (card.Comments.Any())
+                        {
+                            <div class="cardlist-card-icon cardlist-card-icon-comment">
+                                <span class="fas fa-comment"></span>
+                                @card.Comments.Count
+                            </div>
+                        }
+                    </div>
+                }
             </div>
-            <div class="cardlist-card-new" onclick="addNewCard(this)">
+            <div class="cardlist-card-new" onclick="toggleNewCardWindow(this)">
                 <span class="fas fa-plus"></span>
                 Új kártya hozzáadása
             </div>
@@ -84,9 +119,9 @@
 
     <div class="cardlist-container">
         <div class="cardlist-content cardlist-new-input-container">
-            <input class="cardlist-new-input" placeholder="Cím..." />
+            <input class="cardlist-new-input" placeholder="Cím..."/>
             <div class="cardlist-new-control">
-                <a class="btn btn-cardlist-new" onclick="addNewCardList()">Mentés</a>
+                <a class="btn btn-save" onclick="addNewCardList()">Mentés</a>
                 <div class="cardlist-icon-cancel" onclick="toggleNewCardListWindow()">
                     <span class="fas fa-times"></span>
                 </div>
@@ -100,6 +135,18 @@
 </div>
 
 <div class="helper-divs">
+    <div class="empty-card-input">
+        <div class="cardlist-card">
+            <textarea class="cardlist-card-name-input" placeholder="Kártya neve..." spellcheck="false" onkeydown="resizeTextArea(this)" onkeyup="resizeTextArea(this)"></textarea>
+        </div>
+        <div class="empty-card-input-control">
+            <a class="btn btn-save" onclick="addNewCard(this)">Mentés</a>
+            <div class="cardlist-icon-cancel" onclick="toggleNewCardWindow()">
+                <span class="fas fa-times"></span>
+            </div>
+        </div>
+    </div>
+
     <div class="empty-card">
         <div class="cardlist-card">
             <div class="cardlist-card-icon cardlist-card-icon-edit">
@@ -107,7 +154,7 @@
                     <span class="fas fa-pencil-alt"></span>
                 </a>
             </div>
-            Új kártya (WIP)
+            <div class="cardlist-card-name"></div>
         </div>
     </div>
 
@@ -122,7 +169,7 @@
                 </div>
             </div>
             <div class="cardlist-content"></div>
-            <div class="cardlist-card-new" onclick="addNewCard(this)">
+            <div class="cardlist-card-new" onclick="toggleNewCardWindow(this)">
                 <span class="fas fa-plus"></span>
                 Új kártya hozzáadása
             </div>

@@ -340,6 +340,24 @@ html {
     background-color: #a7acb1;
 }
 
+textarea.cardlist-card-name-input {
+    border: none;
+    width: 100%;
+    height: auto;
+    resize: none;
+    overflow: hidden;
+    padding: 0;
+    background-color: inherit;
+}
+
+textarea.cardlist-card-name-input::placeholder {
+    color: #83898e;
+}
+
+.empty-card-input > .cardlist-card:hover {
+    background-color: #fff;
+}
+
 .cardlist-card {
     position: relative;
     background-color: #fff;
@@ -348,6 +366,7 @@ html {
     margin-bottom: 10px;
     word-wrap: break-word;
     cursor: pointer;
+    height: auto;
 }
 
 .cardlist-card:last-child {
@@ -463,19 +482,19 @@ html {
     margin-bottom: 5px;
 }
 
-.btn-cardlist-new {
+.btn-save {
     background-color: #5aac44;
     font-weight: 700;
 }
 
-.btn-cardlist-new:hover {
+.btn-save:hover {
     background-color: #479632;
 }
 
-.btn-cardlist-new:active {
+.btn-save:active {
     background-color: #418b2c;
 }
 
-a.btn-cardlist-new {
+a.btn-save {
     color: #fff !important;
 }

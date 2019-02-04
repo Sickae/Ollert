@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Ollert.Logic.Managers.Interfaces;
 
 namespace Ollert.Web.Controllers
 {
@@ -8,13 +7,6 @@ namespace Ollert.Web.Controllers
     /// </summary>
     public class ControllerBase : Controller
     {
-        private readonly IManagerBase _manager;
-
-        protected ControllerBase(IManagerBase manager)
-        {
-            _manager = manager;
-        }
-
         protected void SetTitle(string title)
         {
             ViewBag.Title = title;
