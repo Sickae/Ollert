@@ -380,6 +380,11 @@ textarea.cardlist-card-name-input::placeholder {
     opacity: 1;
 }
 
+.cardlist-card-edit:hover {
+    background-color: #fff;
+    cursor: default;
+}
+
 .cardlist-card-icon {
     font-size: 11px;
     color: #83898e;

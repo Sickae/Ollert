@@ -24,7 +24,7 @@
                 var inputWindow = $('.empty-card-input').clone();
                 container.find('.cardlist-card-new').hide();
                 container.find('.cardlist-content').append(inputWindow);
-                inputWindow.find('.cardlist-card-name').focus();
+                inputWindow.find('.cardlist-card-name-input').focus();
             }
         }
 
@@ -69,6 +69,19 @@
             $(textarea).css('height', textarea.scrollHeight + 'px');
         }
 
+        function editCard(caller) {
+            var card = $(caller).closest('.cardlist-card');
+            var cardName = card.find('.cardlist-card-name').text();
+            var cardInput = $('.empty-card-input').clone();
+
+            console.log(cardName);
+
+            card.addClass('cardlist-card-edit');
+            card.children('div').hide();
+            card.append(cardInput);
+            cardInput.find('.cardlist-card-name-input').val(cardName).focus();
+        }
+
     </script>
 }
 
@@ -89,7 +102,7 @@
                 {
                     <div class="cardlist-card">
                         <div class="cardlist-card-icon cardlist-card-icon-edit">
-                            <a href="#test">
+                            <a onclick="editCard(this)">
                                 <span class="fas fa-pencil-alt"></span>
                             </a>
                         </div>
@@ -150,7 +163,7 @@
     <div class="empty-card">
         <div class="cardlist-card">
             <div class="cardlist-card-icon cardlist-card-icon-edit">
-                <a href="#">
+                <a onclick="editCard(this)">
                     <span class="fas fa-pencil-alt"></span>
                 </a>
             </div>
