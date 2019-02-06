@@ -28,12 +28,12 @@ namespace Ollert.Web.Controllers
 
                 var cardList = _cardListRepository.Get(cardListId);
                 cardList.Cards.Add(card);
-                var id = _cardListRepository.Save(cardList);
+                _cardListRepository.Save(cardList);
 
                 return Json(new
                 {
                     success = true,
-                    id
+                    id = card.Id
                 });
             }
             else

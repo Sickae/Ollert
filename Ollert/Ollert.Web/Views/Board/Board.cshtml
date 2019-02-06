@@ -38,6 +38,7 @@
                 cardName: cardName
             }).done(function (data) {
                 if (data.success) {
+                    emptyCard.attr('data-id', data.id);
                     emptyCard.find('.cardlist-card-name').text(cardName);
                     list.append(emptyCard);
                     toggleNewCardWindow();
