@@ -39,21 +39,28 @@ namespace Ollert.Web.Controllers
 
         public IActionResult AddNewCardList(int boardId, string cardListName)
         {
-            var cardList = new CardListDTO
+            if (!string.IsNullOrWhiteSpace(cardListName) && cardListName.Length > 0 && cardListName.Length <= 255)
             {
-                Name = cardListName,
-                Cards = new List<CardDTO>()
-            };
+                var cardList = new CardListDTO
+                {
+                    Name = cardListName,
+                    Cards = new List<CardDTO>()
+                };
 
-            var board = _boardRepository.Get(boardId);
-            board.CardLists.Add(cardList);
-            _boardRepository.Save(board);
+                var board = _boardRepository.Get(boardId);
+                board.CardLists.Add(cardList);
+                _boardRepository.Save(board);
 
-            return Json(new
+                return Json(new
+                {
+                    success = true,
+                    id = cardList.Id
+                });
+            }
+            else
             {
-                success = true,
-                id = cardList.Id
-            });
+                return Json(new { success = false });
+            }
         }
     }
 }

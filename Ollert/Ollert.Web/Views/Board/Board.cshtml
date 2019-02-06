@@ -32,16 +32,17 @@
             var emptyCard = $('.helper-divs > .empty-card > .cardlist-card').clone();
             var list = $(caller).closest('.cardlist-container').find('.cardlist-content');
             var cardName = $(caller).closest('.empty-card-input').find('.cardlist-card-name-input').val();
-            console.log(cardName);
-
-            emptyCard.find('.cardlist-card-name').text(cardName);
-            list.append(emptyCard);
-            toggleNewCardWindow();
-            emptyCard.show();
 
             $.post('@Url.Action(nameof(CardListController.AddNewCard), "CardList")', {
                 cardListId: list.data('id'),
                 cardName: cardName
+            }).done(function (data) {
+                if (data.success) {
+                    emptyCard.find('.cardlist-card-name').text(cardName);
+                    list.append(emptyCard);
+                    toggleNewCardWindow();
+                    emptyCard.show();
+                }
             });
         }
 
@@ -59,8 +60,10 @@
                 boardId: @Model.Id,
                 cardListName: title
             }).done(function (data) {
-                var id = data.id;
-                emptyList.find('.cardlist-content').attr('data-id', id);
+                if (data.success) {
+                    var id = data.id;
+                    emptyList.find('.cardlist-content').attr('data-id', id);
+                }
             });
         }
 
@@ -102,9 +105,6 @@
                     editInput.remove();
                     card.find('.cardlist-card-name').text(cardName);
                     card.children('div').show();
-                } else {
-                        var error = $('<div class="test">').text("túl hosszú te fasz");
-                        console.log(jQuery.Event);
                 }
             })
         }
