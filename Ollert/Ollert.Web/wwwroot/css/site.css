@@ -285,10 +285,21 @@ html {
 .cardlist-title {
     display: inline-block;
     width: 85%;
-    max-height: 10%;
+    line-height: 100%;
+    vertical-align: middle;
+    color: #17394d;
+    padding: 5px;
+    background-color: inherit;
+    border: none;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+}
+
+.cardlist-title.edit {
+    border: 2px solid #227ebf;
+    border-radius: 5px;
+    background-color: #fff;
 }
 
 .cardlist-new {
@@ -346,7 +357,7 @@ textarea.cardlist-card-name-input {
     resize: none;
     overflow: hidden;
     padding: 0;
-    background-color: inherit;
+    background-color: #fff;
 }
 
 textarea.cardlist-card-name-input::placeholder {
@@ -359,7 +370,7 @@ textarea.cardlist-card-name-input::placeholder {
 
 .cardlist-card {
     position: relative;
-    background-color: #fff;
+    background-color: #fff; 
     border-radius: 3px;
     padding: 5px;
     margin-bottom: 10px;
@@ -380,7 +391,12 @@ textarea.cardlist-card-name-input::placeholder {
     opacity: 1;
 }
 
-.cardlist-card-edit:hover {
+.cardlist-card.edit:hover {
+    background-color: #fff;
+    cursor: default;
+}
+
+.cardlist-card.edit .cardlist-card:hover {
     background-color: #fff;
     cursor: default;
 }

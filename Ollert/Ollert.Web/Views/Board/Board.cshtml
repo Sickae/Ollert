@@ -29,7 +29,7 @@
         }
 
         function addNewCard(caller) {
-            var emptyCard = $('.empty-card > .cardlist-card').clone();
+            var emptyCard = $('.helper-divs > .empty-card > .cardlist-card').clone();
             var list = $(caller).closest('.cardlist-container').find('.cardlist-content');
             var cardName = $(caller).closest('.empty-card-input').find('.cardlist-card-name-input').val();
             console.log(cardName);
@@ -46,7 +46,7 @@
         }
 
         function addNewCardList() {
-            var emptyList = $('.empty-cardlist > .cardlist-container').clone();
+            var emptyList = $('.helper-divs > .empty-cardlist > .cardlist-container').clone();
             var inputContainer = $('.cardlist-new-input-container').closest('.cardlist-container');
             var title = inputContainer.find('input.cardlist-new-input').val();
 
@@ -69,17 +69,44 @@
             $(textarea).css('height', textarea.scrollHeight + 'px');
         }
 
-        function editCard(caller) {
+        function toggleEditCardWindow(caller) {
             var card = $(caller).closest('.cardlist-card');
-            var cardName = card.find('.cardlist-card-name').text();
-            var cardInput = $('.empty-card-input').clone();
+            var activeWindow = card.find('.edit-card-input');
 
-            console.log(cardName);
+            if (activeWindow.length > 0) {
+                activeWindow.remove();
 
-            card.addClass('cardlist-card-edit');
-            card.children('div').hide();
-            card.append(cardInput);
-            cardInput.find('.cardlist-card-name-input').val(cardName).focus();
+                card.removeClass('edit');
+                card.children('div').show();
+            } else {
+                var cardName = card.find('.cardlist-card-name').text();
+                var cardInput = $('.helper-divs > .edit-card-input').clone();
+
+                card.addClass('edit');
+                card.children('div').hide();
+                card.append(cardInput);
+                cardInput.find('.cardlist-card-name-input').val(cardName).focus();
+            }
+        }
+
+        function editCard(caller) {
+            var cardName = $(caller).closest('.cardlist-card').find('.cardlist-card-name-input').val();
+            var editInput = $(caller).closest('.edit-card-input');
+            var card = editInput.closest('.cardlist-card');
+
+            $.post('@Url.Action(nameof(CardController.EditCardName), "Card")', {
+                id: card.data('id'),
+                cardName
+            }).done(function (data) {
+                if (data.success) {
+                    editInput.remove();
+                    card.find('.cardlist-card-name').text(cardName);
+                    card.children('div').show();
+                } else {
+                        var error = $('<div class="test">').text("túl hosszú te fasz");
+                        console.log(jQuery.Event);
+                }
+            })
         }
 
     </script>
@@ -90,7 +117,7 @@
     {
         <div class="cardlist-container">
             <div class="cardlist-header">
-                <div class="cardlist-title">@cardList.Name</div>
+                <input class="cardlist-title" readonly disabled value="@cardList.Name" />
                 <div class="cardlist-header-menu">
                     <a href="#">
                         <span class="fas fa-ellipsis-h"></span>
@@ -100,9 +127,9 @@
             <div class="cardlist-content" data-id="@cardList.Id">
                 @foreach (var card in cardList.Cards)
                 {
-                    <div class="cardlist-card">
+                    <div class="cardlist-card" data-id="@card.Id">
                         <div class="cardlist-card-icon cardlist-card-icon-edit">
-                            <a onclick="editCard(this)">
+                            <a onclick="toggleEditCardWindow(this)">
                                 <span class="fas fa-pencil-alt"></span>
                             </a>
                         </div>
@@ -160,10 +187,22 @@
         </div>
     </div>
 
+    <div class="edit-card-input">
+        <div class="cardlist-card">
+            <textarea class="cardlist-card-name-input" placeholder="Kártya neve..." spellcheck="false" onkeydown="resizeTextArea(this)" onkeyup="resizeTextArea(this)"></textarea>
+        </div>
+        <div class="edit-card-input-control">
+            <a class="btn btn-save" onclick="editCard(this)">Mentés</a>
+            <div class="cardlist-icon-cancel" onclick="toggleEditCardWindow(this)">
+                <span class="fas fa-times"></span>
+            </div>
+        </div>
+    </div>
+
     <div class="empty-card">
         <div class="cardlist-card">
             <div class="cardlist-card-icon cardlist-card-icon-edit">
-                <a onclick="editCard(this)">
+                <a onclick="toggleEditCardWindow(this)">
                     <span class="fas fa-pencil-alt"></span>
                 </a>
             </div>
