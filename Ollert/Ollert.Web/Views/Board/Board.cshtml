@@ -158,15 +158,16 @@
 
         // Kártya szerkesztés ablak ki/be kapcsolása
         function toggleEditCardWindow(caller) {
-            var card = $(caller).closest('.cardlist-card');
-            var activeWindow = card.find('.edit-card-input');
+            var activeWindow = $(caller).closest('.edit-card-input');
 
             if (activeWindow.length > 0) {
+                var card = activeWindow.closest('.cardlist-card');
                 activeWindow.remove();
 
                 card.removeClass('edit');
                 card.children('div').show();
             } else {
+                var card = $(caller).closest('.cardlist-card');
                 var cardName = card.find('.cardlist-card-name').text();
                 var cardInput = $('.helper-divs > .edit-card-input').clone();
 
