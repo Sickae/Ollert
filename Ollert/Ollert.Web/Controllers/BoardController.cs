@@ -54,7 +54,8 @@ namespace Ollert.Web.Controllers
                 return Json(new
                 {
                     success = true,
-                    id = cardList.Id
+                    id = cardList.Id,
+                    name = cardList.Name
                 });
             }
             else

@@ -12,7 +12,7 @@ namespace Ollert.Web.Controllers
             _cardRepository = cardRepository;
         }
 
-        public IActionResult EditCardName(int id, string cardName)
+        public IActionResult Rename(int id, string cardName)
         {
             if (!string.IsNullOrWhiteSpace(cardName) && cardName.Length > 0 && cardName.Length <= 255)
             {

@@ -30,13 +30,45 @@
             resizeTextArea(this);
         }).on('keyup', '.edit-card-input .cardlist-card-name-input', function (event) {
             if (event.keyCode === 13 && !event.shiftKey) {
-                editCard(this);
+                renameCard(this);
             } else if (event.keyCode === 27) {
                 toggleEditCardWindow(this);
             } else {
                 resizeTextArea(this);
             }
+        }).on('focus', '.cardlist-title', function () {
+            $(this).addClass('edit');
+        }).on('blur', '.cardlist-title', function () {
+            if ($(this).val().length > 0) {
+                renameCardList(this);
+            } else {
+                $(this).val($(this).data('title'));
+            }
+            $(this).removeClass('edit');
+        }).on('keyup', '.cardlist-title', function (event) {
+            if (event.keyCode === 13) {
+                $(this).blur();
+            } else if (event.keyCode === 27) {
+
+                $(this).val('');
+                $(this).blur();
+            }
         });
+
+        // Lista átnevezése
+        function renameCardList(caller) {
+            var listContainer = $(caller).closest('.cardlist-container');
+            $.post('@Url.Action(nameof(CardListController.Rename), "CardList")', {
+                id: listContainer.data('id'),
+                cardListName: $(caller).val()
+            }).done(function (data) {
+                if (data.success) {
+                    $(caller).attr('data-title', data.name);
+                } else {
+                    $(caller).val($(caller).data('title'));
+                }
+            });
+        }
 
         // Új lista hozzáadása ablak ki/be kapcsolása
         function toggleNewCardListWindow() {
@@ -68,17 +100,17 @@
         // Új kártya hozzáadása
         function addNewCard(caller) {
             var emptyCard = $('.helper-divs > .empty-card > .cardlist-card').clone();
-            var list = $(caller).closest('.cardlist-container').find('.cardlist-content');
+            var listContainer = $(caller).closest('.cardlist-container');
             var cardName = $(caller).closest('.empty-card-input').find('.cardlist-card-name-input').val();
 
             $.post('@Url.Action(nameof(CardListController.AddNewCard), "CardList")', {
-                cardListId: list.data('id'),
+                cardListId: listContainer.data('id'),
                 cardName: cardName
             }).done(function (data) {
                 if (data.success) {
                     emptyCard.attr('data-id', data.id);
                     emptyCard.find('.cardlist-card-name').text(cardName);
-                    list.append(emptyCard);
+                    listContainer.find('.cardlist-content').append(emptyCard);
                     toggleNewCardWindow();
                     emptyCard.show();
                 }
@@ -91,7 +123,7 @@
             var inputContainer = $('.cardlist-new-input-container').closest('.cardlist-container');
             var title = inputContainer.find('input.cardlist-new-input').val();
 
-            emptyList.find('.cardlist-title').text(title);
+            emptyList.find('.cardlist-title').val(title);
             inputContainer.find('.cardlist-new').show();
             inputContainer.find('.cardlist-new-input-container').hide();
             $('.cardlist-list').append(emptyList).append(inputContainer);
@@ -102,7 +134,8 @@
             }).done(function (data) {
                 if (data.success) {
                     var id = data.id;
-                    emptyList.find('.cardlist-content').attr('data-id', id);
+                    emptyList.attr('data-id', id);
+                    emptyList.find('.cardlist-title').attr('data-title', data.name);
                 }
             });
         }
@@ -134,13 +167,13 @@
             }
         }
 
-        // Kártya szerkesztése
-        function editCard(caller) {
+        // Kártya átnevezése
+        function renameCard(caller) {
             var cardName = $(caller).closest('.cardlist-card').find('.cardlist-card-name-input').val();
             var editInput = $(caller).closest('.edit-card-input');
             var card = editInput.closest('.cardlist-card');
 
-            $.post('@Url.Action(nameof(CardController.EditCardName), "Card")', {
+            $.post('@Url.Action(nameof(CardController.Rename), "Card")', {
                 id: card.data('id'),
                 cardName
             }).done(function (data) {
@@ -158,16 +191,16 @@
 <div class="row cardlist-list">
     @foreach (var cardList in Model.CardLists)
     {
-        <div class="cardlist-container">
+        <div class="cardlist-container" data-id="@cardList.Id">
             <div class="cardlist-header">
-                <input class="cardlist-title" readonly disabled value="@cardList.Name" />
+                <input class="cardlist-title" value="@cardList.Name" data-title="@cardList.Name" />
                 <div class="cardlist-header-menu">
                     <a href="#">
                         <span class="fas fa-ellipsis-h"></span>
                     </a>
                 </div>
             </div>
-            <div class="cardlist-content" data-id="@cardList.Id">
+            <div class="cardlist-content">
                 @foreach (var card in cardList.Cards)
                 {
                     <div class="cardlist-card" data-id="@card.Id">
@@ -235,7 +268,7 @@
             <textarea class="cardlist-card-name-input" placeholder="Kártya neve..." spellcheck="false"></textarea>
         </div>
         <div class="edit-card-input-control">
-            <a class="btn btn-save" onclick="editCard(this)">Mentés</a>
+            <a class="btn btn-save" onclick="renameCard(this)">Mentés</a>
             <div class="cardlist-icon-cancel" onclick="toggleEditCardWindow(this)">
                 <span class="fas fa-times"></span>
             </div>
@@ -256,7 +289,7 @@
     <div class="empty-cardlist">
         <div class="cardlist-container">
             <div class="cardlist-header">
-                <div class="cardlist-title"></div>
+                <input class="cardlist-title"></input>
                 <div class="cardlist-header-menu">
                     <a href="#">
                         <span class="fas fa-ellipsis-h"></span>

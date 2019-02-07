@@ -41,5 +41,26 @@ namespace Ollert.Web.Controllers
                 return Json(new { success = false });
             }
         }
+
+        public IActionResult Rename(int id, string cardListName)
+        {
+            if (!string.IsNullOrEmpty(cardListName) && cardListName.Length > 0 && cardListName.Length <= 255)
+            {
+                var cardList = _cardListRepository.Get(id);
+                cardList.Name = cardListName;
+                _cardListRepository.Save(cardList);
+
+                return Json(new
+                {
+                    success = true,
+                    id = cardList.Id,
+                    name = cardList.Name
+                });
+            }
+            else
+            {
+                return Json(new { success = false });
+            }
+        }
     }
 }
