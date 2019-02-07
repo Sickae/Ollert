@@ -3,6 +3,7 @@
 @section Scripts {
     <script type="text/javascript">
 
+        // Event listener-ek regisztrálása
         $(document).on('keyup', '.cardlist-new-input', function (event) {
             if (event.keyCode === 13) { // Enter
                 addNewCardList();
@@ -37,6 +38,7 @@
             }
         });
 
+        // Új lista hozzáadása ablak ki/be kapcsolása
         function toggleNewCardListWindow() {
             $('input.cardlist-new-input').val('');
             $('.cardlist-new').toggle();
@@ -47,6 +49,7 @@
             }
         }
 
+        // Új kártya hozzáadása ablak ki/be kapcsolása
         function toggleNewCardWindow(caller) {
             var activeWindow = $('.cardlist-list').find('.empty-card-input');
 
@@ -62,6 +65,7 @@
             }
         }
 
+        // Új kártya hozzáadása
         function addNewCard(caller) {
             var emptyCard = $('.helper-divs > .empty-card > .cardlist-card').clone();
             var list = $(caller).closest('.cardlist-container').find('.cardlist-content');
@@ -81,6 +85,7 @@
             });
         }
 
+        // Új lista hozzáadása
         function addNewCardList() {
             var emptyList = $('.helper-divs > .empty-cardlist > .cardlist-container').clone();
             var inputContainer = $('.cardlist-new-input-container').closest('.cardlist-container');
@@ -102,11 +107,13 @@
             });
         }
 
+        // Textarea (pl. új kártya input mező) automatikus átméretezése
         function resizeTextArea(textarea) {
             $(textarea).css('height', 'auto');
             $(textarea).css('height', textarea.scrollHeight + 'px');
         }
 
+        // Kártya szerkesztés ablak ki/be kapcsolása
         function toggleEditCardWindow(caller) {
             var card = $(caller).closest('.cardlist-card');
             var activeWindow = card.find('.edit-card-input');
@@ -127,6 +134,7 @@
             }
         }
 
+        // Kártya szerkesztése
         function editCard(caller) {
             var cardName = $(caller).closest('.cardlist-card').find('.cardlist-card-name-input').val();
             var editInput = $(caller).closest('.edit-card-input');
