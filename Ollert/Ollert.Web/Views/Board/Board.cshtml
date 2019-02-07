@@ -4,18 +4,26 @@
     <script type="text/javascript">
 
         // Event listener-ek regisztrálása
+
+        // Új lista hozzáadásnál Enter és Esc gombok működése
         $(document).on('keyup', '.cardlist-new-input', function (event) {
             if (event.keyCode === 13) { // Enter
                 addNewCardList();
             } else if (event.keyCode === 27) { // Escape
                 toggleNewCardListWindow();
             }
-        }).on('keydown', '.empty-card-input .cardlist-card-name-input', function (event) {
+        });
+
+        // Új kártya hozzáadásnál meggátolja az új sort Enter leütésénél Shift nélkül
+        $(document).on('keydown', '.empty-card-input .cardlist-card-name-input', function (event) {
             if (event.keyCode === 13 && !event.shiftKey) {
                 event.preventDefault();
             }
             resizeTextArea(this);
-        }).on('keyup', '.empty-card-input .cardlist-card-name-input', function (event) {
+        });
+
+        // Új kártya hozzáadásnál Enter és Esc gombok működése
+        $(document).on('keyup', '.empty-card-input .cardlist-card-name-input', function (event) {
             if (event.keyCode === 13 && !event.shiftKey) {
                 addNewCard(this);
             } else if (event.keyCode === 27) {
@@ -23,12 +31,18 @@
             } else {
                 resizeTextArea(this);
             }
-        }).on('keydown', '.edit-card-input .cardlist-card-name-input', function (event) {
+        });
+
+        // Kártya szerkesztésnél meggátolja az új sort Enter leütésénél Shift nélkül
+        $(document).on('keydown', '.edit-card-input .cardlist-card-name-input', function (event) {
             if (event.keyCode === 13 && !event.shiftKey) {
                 event.preventDefault();
             }
             resizeTextArea(this);
-        }).on('keyup', '.edit-card-input .cardlist-card-name-input', function (event) {
+        });
+
+        // Kártya szerkesztésnél Enter és Esc gombok működése
+        $(document).on('keyup', '.edit-card-input .cardlist-card-name-input', function (event) {
             if (event.keyCode === 13 && !event.shiftKey) {
                 renameCard(this);
             } else if (event.keyCode === 27) {
@@ -36,16 +50,25 @@
             } else {
                 resizeTextArea(this);
             }
-        }).on('focus', '.cardlist-title', function () {
+        });
+
+        // Lista címére kattintva szerkeszthetővé teszi
+        $(document).on('focus', '.cardlist-title', function () {
             $(this).addClass('edit');
-        }).on('blur', '.cardlist-title', function () {
+        });
+
+        // Lista cím input kikattintásánál elmenti a módosításokat
+        $(document).on('blur', '.cardlist-title', function () {
             if ($(this).val().length > 0) {
                 renameCardList(this);
             } else {
                 $(this).val($(this).data('title'));
             }
             $(this).removeClass('edit');
-        }).on('keyup', '.cardlist-title', function (event) {
+        });
+
+        // Lista cím szerkesztésénél Enter és Esc gombok működése
+        $(document).on('keyup', '.cardlist-title', function (event) {
             if (event.keyCode === 13) {
                 $(this).blur();
             } else if (event.keyCode === 27) {
@@ -54,6 +77,8 @@
                 $(this).blur();
             }
         });
+
+        // Functions
 
         // Lista átnevezése
         function renameCardList(caller) {
