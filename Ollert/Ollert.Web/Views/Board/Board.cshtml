@@ -3,6 +3,40 @@
 @section Scripts {
     <script type="text/javascript">
 
+        $(document).on('keyup', '.cardlist-new-input', function (event) {
+            if (event.keyCode === 13) { // Enter
+                addNewCardList();
+            } else if (event.keyCode === 27) { // Escape
+                toggleNewCardListWindow();
+            }
+        }).on('keydown', '.empty-card-input .cardlist-card-name-input', function (event) {
+            if (event.keyCode === 13 && !event.shiftKey) {
+                event.preventDefault();
+            }
+            resizeTextArea(this);
+        }).on('keyup', '.empty-card-input .cardlist-card-name-input', function (event) {
+            if (event.keyCode === 13 && !event.shiftKey) {
+                addNewCard(this);
+            } else if (event.keyCode === 27) {
+                toggleNewCardWindow(this);
+            } else {
+                resizeTextArea(this);
+            }
+        }).on('keydown', '.edit-card-input .cardlist-card-name-input', function (event) {
+            if (event.keyCode === 13 && !event.shiftKey) {
+                event.preventDefault();
+            }
+            resizeTextArea(this);
+        }).on('keyup', '.edit-card-input .cardlist-card-name-input', function (event) {
+            if (event.keyCode === 13 && !event.shiftKey) {
+                editCard(this);
+            } else if (event.keyCode === 27) {
+                toggleEditCardWindow(this);
+            } else {
+                resizeTextArea(this);
+            }
+        });
+
         function toggleNewCardListWindow() {
             $('input.cardlist-new-input').val('');
             $('.cardlist-new').toggle();
@@ -21,7 +55,7 @@
                 activeWindow.remove();
             } else {
                 var container = $(caller).closest('.cardlist-container');
-                var inputWindow = $('.empty-card-input').clone();
+                var inputWindow = $('.helper-divs > .empty-card-input').clone();
                 container.find('.cardlist-card-new').hide();
                 container.find('.cardlist-content').append(inputWindow);
                 inputWindow.find('.cardlist-card-name-input').focus();
@@ -178,7 +212,7 @@
 <div class="helper-divs">
     <div class="empty-card-input">
         <div class="cardlist-card">
-            <textarea class="cardlist-card-name-input" placeholder="Kártya neve..." spellcheck="false" onkeydown="resizeTextArea(this)" onkeyup="resizeTextArea(this)"></textarea>
+            <textarea class="cardlist-card-name-input" placeholder="Kártya neve..." spellcheck="false"></textarea>
         </div>
         <div class="empty-card-input-control">
             <a class="btn btn-save" onclick="addNewCard(this)">Mentés</a>
@@ -190,7 +224,7 @@
 
     <div class="edit-card-input">
         <div class="cardlist-card">
-            <textarea class="cardlist-card-name-input" placeholder="Kártya neve..." spellcheck="false" onkeydown="resizeTextArea(this)" onkeyup="resizeTextArea(this)"></textarea>
+            <textarea class="cardlist-card-name-input" placeholder="Kártya neve..." spellcheck="false"></textarea>
         </div>
         <div class="edit-card-input-control">
             <a class="btn btn-save" onclick="editCard(this)">Mentés</a>
