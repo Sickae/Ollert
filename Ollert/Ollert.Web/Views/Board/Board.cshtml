@@ -78,22 +78,15 @@
             }
         });
 
-        // Functions
+        // Helper functions
 
-        // Lista átnevezése
-        function renameCardList(caller) {
-            var listContainer = $(caller).closest('.cardlist-container');
-            $.post('@Url.Action(nameof(CardListController.Rename), "CardList")', {
-                id: listContainer.data('id'),
-                cardListName: $(caller).val()
-            }).done(function (data) {
-                if (data.success) {
-                    $(caller).attr('data-title', data.name);
-                } else {
-                    $(caller).val($(caller).data('title'));
-                }
-            });
+        // Textarea (pl. új kártya input mező) automatikus átméretezése
+        function resizeTextArea(textarea) {
+            $(textarea).css('height', 'auto');
+            $(textarea).css('height', textarea.scrollHeight + 'px');
         }
+
+        // CardList functions
 
         // Új lista hozzáadása ablak ki/be kapcsolása
         function toggleNewCardListWindow() {
@@ -104,42 +97,6 @@
             if (inputContainer.css('display') === 'block') {
                 $('.cardlist-new-input').focus();
             }
-        }
-
-        // Új kártya hozzáadása ablak ki/be kapcsolása
-        function toggleNewCardWindow(caller) {
-            var activeWindow = $('.cardlist-list').find('.empty-card-input');
-
-            if (activeWindow.length > 0) {
-                activeWindow.closest('.cardlist-container').find('.cardlist-card-new').show();
-                activeWindow.remove();
-            } else {
-                var container = $(caller).closest('.cardlist-container');
-                var inputWindow = $('.helper-divs > .empty-card-input').clone();
-                container.find('.cardlist-card-new').hide();
-                container.find('.cardlist-content').append(inputWindow);
-                inputWindow.find('.cardlist-card-name-input').focus();
-            }
-        }
-
-        // Új kártya hozzáadása
-        function addNewCard(caller) {
-            var emptyCard = $('.helper-divs > .empty-card > .cardlist-card').clone();
-            var listContainer = $(caller).closest('.cardlist-container');
-            var cardName = $(caller).closest('.empty-card-input').find('.cardlist-card-name-input').val();
-
-            $.post('@Url.Action(nameof(CardListController.AddNewCard), "CardList")', {
-                cardListId: listContainer.data('id'),
-                cardName: cardName
-            }).done(function (data) {
-                if (data.success) {
-                    emptyCard.attr('data-id', data.id);
-                    emptyCard.find('.cardlist-card-name').text(cardName);
-                    listContainer.find('.cardlist-content').append(emptyCard);
-                    toggleNewCardWindow();
-                    emptyCard.show();
-                }
-            });
         }
 
         // Új lista hozzáadása
@@ -165,10 +122,37 @@
             });
         }
 
-        // Textarea (pl. új kártya input mező) automatikus átméretezése
-        function resizeTextArea(textarea) {
-            $(textarea).css('height', 'auto');
-            $(textarea).css('height', textarea.scrollHeight + 'px');
+        // Lista átnevezése
+        function renameCardList(caller) {
+            var listContainer = $(caller).closest('.cardlist-container');
+            $.post('@Url.Action(nameof(CardListController.Rename), "CardList")', {
+                id: listContainer.data('id'),
+                cardListName: $(caller).val()
+            }).done(function (data) {
+                if (data.success) {
+                    $(caller).attr('data-title', data.name);
+                } else {
+                    $(caller).val($(caller).data('title'));
+                }
+            });
+        }
+
+        // Card functions
+
+        // Új kártya hozzáadása ablak ki/be kapcsolása
+        function toggleNewCardWindow(caller) {
+            var activeWindow = $('.cardlist-list').find('.empty-card-input');
+
+            if (activeWindow.length > 0) {
+                activeWindow.closest('.cardlist-container').find('.cardlist-card-new').show();
+                activeWindow.remove();
+            } else {
+                var container = $(caller).closest('.cardlist-container');
+                var inputWindow = $('.helper-divs > .empty-card-input').clone();
+                container.find('.cardlist-card-new').hide();
+                container.find('.cardlist-content').append(inputWindow);
+                inputWindow.find('.cardlist-card-name-input').focus();
+            }
         }
 
         // Kártya szerkesztés ablak ki/be kapcsolása
@@ -191,6 +175,26 @@
                 cardInput.find('.cardlist-card-name-input').val(cardName).focus();
             }
         }
+
+        // Új kártya hozzáadása
+        function addNewCard(caller) {
+            var emptyCard = $('.helper-divs > .empty-card > .cardlist-card').clone();
+            var listContainer = $(caller).closest('.cardlist-container');
+            var cardName = $(caller).closest('.empty-card-input').find('.cardlist-card-name-input').val();
+
+            $.post('@Url.Action(nameof(CardListController.AddNewCard), "CardList")', {
+                cardListId: listContainer.data('id'),
+                cardName: cardName
+            }).done(function (data) {
+                if (data.success) {
+                    emptyCard.attr('data-id', data.id);
+                    emptyCard.find('.cardlist-card-name').text(cardName);
+                    listContainer.find('.cardlist-content').append(emptyCard);
+                    toggleNewCardWindow();
+                    emptyCard.show();
+                }
+            });
+        }         
 
         // Kártya átnevezése
         function renameCard(caller) {
