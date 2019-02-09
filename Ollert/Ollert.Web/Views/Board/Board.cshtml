@@ -150,14 +150,16 @@
             var activeWindow = $('.cardlist-list').find('.empty-card-input');
 
             if (activeWindow.length > 0) {
-                activeWindow.closest('.cardlist-container').find('.cardlist-card-new').show();
-                activeWindow.remove();
+                var container = activeWindow.closest('.cardlist-container');
+                container.find('.cardlist-content.new').removeClass('new');
+                container.find('.cardlist-card-new').slideDown('fast');
+                activeWindow.slideUp('fast', () => activeWindow.remove());
             } else {
                 var container = $(caller).closest('.cardlist-container');
-                var inputWindow = $('.helper-divs > .empty-card-input').clone();
-                container.find('.cardlist-card-new').hide();
-                container.find('.cardlist-content').append(inputWindow);
-                inputWindow.find('.cardlist-card-name-input').focus();
+                var inputWindow = $('.helper-divs > .empty-card-input').clone().hide();
+                container.find('.cardlist-card-new').slideUp('fast');
+                container.find('.cardlist-content').addClass('new').append(inputWindow);
+                inputWindow.slideDown('fast', () => inputWindow.find('.cardlist-card-name-input').focus());
             }
         }
 

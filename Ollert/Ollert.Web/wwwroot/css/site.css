@@ -111,7 +111,7 @@ html {
     height: 40px;
     text-align: center;
     vertical-align: middle;
-    color: #aad1ed;
+    color: #fff;
     font-weight: 700;
     font-size: 18px;
     line-height: 40px;
@@ -335,7 +335,6 @@ html {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-    width: 250px;
 }
 
 .cardlist-new > span {
@@ -371,6 +370,10 @@ html {
 
 .cardlist-card-new:active {
     background-color: #a7acb1;
+}
+
+.cardlist-content.new {
+    border-radius: 0 0 5px 5px;
 }
 
 textarea.cardlist-card-name-input {
