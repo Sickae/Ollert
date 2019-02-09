@@ -41,6 +41,16 @@
             }
         });
 
+        // Kártya nézet megjelenítése
+        $(document).on('click', '.cardlist-card-content', function () {
+            showCardDetails(this);
+        });
+
+        // Kártya nézet elrejtése
+        $(document).on('click', '.dim-overlay', function () {
+            hideCardDetails();
+        });
+
         // Új kártya hozzáadásnál meggátolja az új sort Enter leütésénél Shift nélkül
         $(document).on('keydown', '.empty-card-input .cardlist-card-name-input', function (event) {
             if (event.keyCode === 13 && !event.shiftKey) {
@@ -84,12 +94,58 @@
             deleteCard(this);
         });
 
+        // Kártya nézet bezáró ikon
+        $(document).on('click', '.card-details-close', function () {
+            hideCardDetails();
+        });
+
+        // Kártya nézetben címre kattintva szerkesztő formázás
+        $(document).on('click', '.card-details-title', function () {
+            $(this).addClass('edit');
+        });
+
+        // Kártya nézetben címből kikattintva vissza az eredeti formázásra és a módosítások mentése ha kell
+        $(document).on('blur', '.card-details-title', function () {
+            var cardId = $(this).closest('.card-details').data('id');
+            var cardName = $(this).val();
+
+            $(this).removeClass('edit');
+            $(this).caretToStart();
+            resizeTextArea(this, 40);
+
+            if ($(this).val().length > 0) {
+                renameCard(cardId, cardName);
+            } else {
+                var originalName = $('.cardlist-card[data-id=' + cardId + ']').find('.cardlist-card-name').text();
+                $(this).val(originalName);
+            }
+        });
+
+        // Kártya nézetben cím szerkesztésnél Enter és Esc gombok működése
+        $(document).on('keydown keyup', '.card-details-title', function (event) {
+            var cardId = $(this).closest('.card-details').data('id');
+
+            if (event.keyCode === 13 && !event.shiftKey) {
+                $(this).blur();
+            }
+            else if (event.keyCode === 27) {
+                var originalName = $('.cardlist-card[data-id=' + cardId + ']').find('.cardlist-card-name').text();
+                $(this).val(originalName).blur();
+            } else {
+                resizeTextArea(this, 40);
+            }
+        });
+
         // Helper functions
 
         // Textarea (pl. új kártya input mező) automatikus átméretezése
-        function resizeTextArea(textarea) {
-            $(textarea).css('height', 'auto');
-            $(textarea).css('height', textarea.scrollHeight + 'px');
+        function resizeTextArea(textarea, defaultHeight) {
+            var def = defaultHeight === undefined ? 'auto' : defaultHeight + 'px';
+
+            if (defaultHeight === undefined || textarea.scrollHeight > defaultHeight) {
+                $(textarea).css('height', def);
+                $(textarea).css('height', textarea.scrollHeight + 'px');
+            }
         }
 
         // CardList functions
@@ -145,6 +201,28 @@
 
         // Card functions
 
+        // Kártya nézet megjelenítése
+        function showCardDetails(caller) {
+            var dimmer = $('<div>').addClass('dim-overlay');
+            var cardDetails = $('.card-details').clone();
+            var card = $(caller).closest('.cardlist-card');
+            var cardName = card.find('.cardlist-card-name').text();
+            var cardDesc = card.find('#card_Description').val();
+
+            cardDetails.attr('data-id', card.data('id'));
+            cardDetails.find('.card-details-title').val(cardName);
+            cardDetails.find('.card-details-description-text').val(cardDesc);
+
+            $('body').append(dimmer).append(cardDetails);
+            resizeTextArea(cardDetails.find('.card-details-title')[0], 30);
+        }
+
+        // Kártya nézet elrejtése
+        function hideCardDetails() {
+            $('.dim-overlay').remove();
+            $('.card-details').last().remove();
+        }
+
         // Új kártya hozzáadása ablak ki/be kapcsolása
         function toggleNewCardWindow(caller) {
             var activeWindow = $('.cardlist-list').find('.empty-card-input');
@@ -192,6 +270,7 @@
             var emptyCard = $('.helper-divs > .empty-card > .cardlist-card').clone();
             var listContainer = $(caller).closest('.cardlist-container');
             var cardName = $(caller).closest('.empty-card-input').find('.cardlist-card-name-input').val();
+            var cardDesc = $('<input id="card_Description" type="hidden">');
 
             $.post('@Url.Action(nameof(CardListController.AddNewCard), "CardList")', {
                 cardListId: listContainer.data('id'),
@@ -200,6 +279,7 @@
                 if (data.success) {
                     emptyCard.attr('data-id', data.id);
                     emptyCard.find('.cardlist-card-name').text(cardName);
+                    emptyCard.append(cardDesc);
                     listContainer.find('.cardlist-content').append(emptyCard);
                     toggleNewCardWindow();
                     emptyCard.show();
@@ -207,7 +287,7 @@
             });
         }         
 
-        // Kártya átnevezése
+        // Kártya átnevezése (szerkesztés ablakból)
         function renameCard(caller) {
             var cardName = $(caller).closest('.cardlist-card').find('.cardlist-card-name-input').val();
             var editInput = $(caller).closest('.edit-card-input');
@@ -222,7 +302,20 @@
                     card.find('.cardlist-card-name').text(cardName);
                     card.children('div').show();
                 }
-            })
+            });
+        }
+
+        // Kártya átnevezés (nézet ablakból)
+        function renameCard(cardId, cardName) {
+            $.post('@Url.Action(nameof(CardController.Rename), "Card")', {
+                id: cardId,
+                cardName
+            }).done(function (data) {
+                if (data.success) {
+                    var card = $('.cardlist-card[data-id=' + cardId + ']');
+                    card.find('.cardlist-card-name').text(cardName);
+                }
+            });
         }
 
         // Kártya törlése
@@ -248,7 +341,7 @@
     {
         <div class="cardlist-container" data-id="@cardList.Id">
             <div class="cardlist-header">
-                <input class="cardlist-title" value="@cardList.Name" data-title="@cardList.Name" />
+                <input class="cardlist-title" value="@cardList.Name" data-title="@cardList.Name" maxlength="255" />
                 <div class="cardlist-header-menu">
                     <a class="cardlist-header-menu-link">
                         <span class="fas fa-ellipsis-h"></span>
@@ -259,25 +352,28 @@
                 @foreach (var card in cardList.Cards)
                 {
                     <div class="cardlist-card" data-id="@card.Id">
+                        @Html.HiddenFor(x => card.Description)
                         <div class="cardlist-card-icon cardlist-card-icon-edit">
                             <a onclick="toggleEditCardWindow(this)">
                                 <span class="fas fa-pencil-alt"></span>
                             </a>
                         </div>
-                        @foreach (var label in card.Labels)
-                        {
-                            <div class="cardlist-card-label-container">
-                                <div class="cardlist-card-label" style="background-color: @label.Color"></div>
-                            </div>
-                        }
-                        <div class="cardlist-card-name">@card.Name</div>
-                        @if (card.Comments.Any())
-                        {
-                            <div class="cardlist-card-icon cardlist-card-icon-comment">
-                                <span class="fas fa-comment"></span>
-                                @card.Comments.Count
-                            </div>
-                        }
+                        <div class="cardlist-card-content">
+                            @foreach (var label in card.Labels)
+                            {
+                                <div class="cardlist-card-label-container">
+                                    <div class="cardlist-card-label" style="background-color: @label.Color"></div>
+                                </div>
+                            }
+                            <div class="cardlist-card-name">@card.Name</div>
+                            @if (card.Comments.Any())
+                            {
+                                <div class="cardlist-card-icon cardlist-card-icon-comment">
+                                    <span class="fas fa-comment"></span>
+                                    @card.Comments.Count
+                                </div>
+                            }
+                        </div>
                     </div>
                 }
             </div>
@@ -290,7 +386,7 @@
 
     <div class="cardlist-container">
         <div class="cardlist-content cardlist-new-input-container">
-            <input class="cardlist-new-input" placeholder="Cím..."/>
+            <input class="cardlist-new-input" placeholder="Cím..." maxlength="255" />
             <div class="cardlist-new-control">
                 <a class="btn btn-save" onclick="addNewCardList()">Mentés</a>
                 <div class="cardlist-icon-cancel" onclick="toggleNewCardListWindow()">
@@ -309,7 +405,7 @@
     @* Kártya létrehozás *@
     <div class="empty-card-input">
         <div class="cardlist-card">
-            <textarea class="cardlist-card-name-input" placeholder="Kártya neve..." spellcheck="false"></textarea>
+            <textarea class="cardlist-card-name-input" placeholder="Kártya neve..." spellcheck="false" maxlength="255"></textarea>
         </div>
         <div class="empty-card-input-control">
             <a class="btn btn-save" onclick="addNewCard(this)">Mentés</a>
@@ -322,7 +418,7 @@
     @* Kártya szerkesztés *@
     <div class="edit-card-input">
         <div class="cardlist-card">
-            <textarea class="cardlist-card-name-input" placeholder="Kártya neve..." spellcheck="false"></textarea>
+            <textarea class="cardlist-card-name-input" placeholder="Kártya neve..." spellcheck="false" maxlength="255"></textarea>
         </div>
         <div class="edit-card-input-control">
             <a class="btn btn-save" onclick="renameCard(this)">Mentés</a>
@@ -343,7 +439,9 @@
                     <span class="fas fa-pencil-alt"></span>
                 </a>
             </div>
-            <div class="cardlist-card-name"></div>
+            <div class="cardlist-card-content">
+                <div class="cardlist-card-name"></div>
+            </div>
         </div>
     </div>
 
@@ -351,7 +449,7 @@
     <div class="empty-cardlist">
         <div class="cardlist-container">
             <div class="cardlist-header">
-                <input class="cardlist-title" />
+                <input class="cardlist-title" maxlength="255" />
                 <div class="cardlist-header-menu">
                     <a href="#">
                         <span class="fas fa-ellipsis-h"></span>
@@ -362,6 +460,41 @@
             <div class="cardlist-card-new" onclick="toggleNewCardWindow(this)">
                 <span class="fas fa-plus"></span>
                 Új kártya hozzáadása
+            </div>
+        </div>
+    </div>
+
+    @* Kártya nézet mock *@
+    <div class="card-details">
+        <div class="card-details-header">
+            <div class="card-details-icon">
+                <span class="fas fa-clipboard"></span>
+            </div>
+            <textarea class="card-details-title" placeholder="Kártya neve..." spellcheck="false" maxlength="255"></textarea>
+            <div class="card-details-icon card-details-close">
+                <span class="fas fa-times"></span>
+            </div>
+        </div>
+        <div class="card-details-body">
+            <div class="card-details-side-menu">
+                <div class="card-details-side-menu-section">Műveletek</div>
+                <a href="#" class="btn btn-card-action">
+                    <span class="fas fa-arrow-right"></span>
+                    Mozgatás
+                </a>
+                <a href="#" class="btn btn-card-action">
+                    <span class="fas fa-trash"></span>
+                    Törlés
+                </a>
+            </div>
+            <div class="card-details-content">
+                <div class="card-details-description">
+                    <div class="card-details-icon">
+                        <span class="fas fa-bars"></span>
+                    </div>
+                    <div class="card-details-description-title">Leírás</div>
+                </div>
+                <textarea class="card-details-description-text" placeholder="Leírás..." spellcheck="false"></textarea>
             </div>
         </div>
     </div>
