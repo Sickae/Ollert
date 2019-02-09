@@ -14,6 +14,33 @@
             }
         });
 
+        // Lista címére kattintva szerkeszthetővé teszi
+        $(document).on('focus', '.cardlist-title', function () {
+            $(this).addClass('edit');
+        });
+
+        // Lista cím input kikattintásánál elmenti a módosításokat
+        $(document).on('blur', '.cardlist-title', function () {
+            if ($(this).val().length > 0) {
+                renameCardList(this);
+            } else {
+                $(this).val($(this).data('title'));
+            }
+            $(this).removeClass('edit');
+            $(this).caretToStart();
+        });
+
+        // Lista cím szerkesztésénél Enter és Esc gombok működése
+        $(document).on('keyup', '.cardlist-title', function (event) {
+            if (event.keyCode === 13) {
+                $(this).blur();
+            } else if (event.keyCode === 27) {
+
+                $(this).val('');
+                $(this).blur();
+            }
+        });
+
         // Új kártya hozzáadásnál meggátolja az új sort Enter leütésénél Shift nélkül
         $(document).on('keydown', '.empty-card-input .cardlist-card-name-input', function (event) {
             if (event.keyCode === 13 && !event.shiftKey) {
@@ -54,34 +81,7 @@
 
         // Kártya törlése
         $(document).on('click', '.cardlist-icon-delete', function () {
-            deleteCard($(this));
-        });
-
-        // Lista címére kattintva szerkeszthetővé teszi
-        $(document).on('focus', '.cardlist-title', function () {
-            $(this).addClass('edit');
-        });
-
-        // Lista cím input kikattintásánál elmenti a módosításokat
-        $(document).on('blur', '.cardlist-title', function () {
-            if ($(this).val().length > 0) {
-                renameCardList(this);
-            } else {
-                $(this).val($(this).data('title'));
-            }
-            $(this).removeClass('edit');
-            $(this).caretToStart();
-        });
-
-        // Lista cím szerkesztésénél Enter és Esc gombok működése
-        $(document).on('keyup', '.cardlist-title', function (event) {
-            if (event.keyCode === 13) {
-                $(this).blur();
-            } else if (event.keyCode === 27) {
-
-                $(this).val('');
-                $(this).blur();
-            }
+            deleteCard(this);
         });
 
         // Helper functions
@@ -235,7 +235,7 @@
                 if (data.success) {
                     $('.cardlist-card[data-id=' + cardId + ']').remove();
                 }
-            })
+            });
         }
 
     </script>
