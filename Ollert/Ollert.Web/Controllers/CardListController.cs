@@ -2,6 +2,7 @@
 using Ollert.Logic.DTOs;
 using Ollert.Logic.Repositories;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Ollert.Web.Controllers
 {
@@ -40,6 +41,17 @@ namespace Ollert.Web.Controllers
             {
                 return Json(new { success = false });
             }
+        }
+
+        public IActionResult RemoveCard(int cardListId, int cardId)
+        {
+            var cardList = _cardListRepository.Get(cardListId);
+            var card = cardList.Cards.FirstOrDefault(x => x.Id == cardId);
+
+            cardList.Cards.Remove(card);
+            _cardListRepository.Save(cardList);
+
+            return Json(new { success = true });
         }
 
         public IActionResult Rename(int id, string cardListName)

@@ -52,6 +52,11 @@
             }
         });
 
+        // Kártya törlése
+        $(document).on('click', '.cardlist-icon-delete', function () {
+            deleteCard($(this));
+        });
+
         // Lista címére kattintva szerkeszthetővé teszi
         $(document).on('focus', '.cardlist-title', function () {
             $(this).addClass('edit');
@@ -168,12 +173,14 @@
                 card.children('div').show();
             } else {
                 var card = $(caller).closest('.cardlist-card');
+                var cardId = card.data('id');
                 var cardName = card.find('.cardlist-card-name').text();
                 var cardInput = $('.helper-divs > .edit-card-input').clone();
 
                 card.addClass('edit');
                 card.children('div').hide();
                 card.append(cardInput);
+                cardInput.find('.cardlist-card').attr('data-id', cardId);
                 cardInput.find('.cardlist-card-name-input').val(cardName).focus();
             }
         }
@@ -212,6 +219,21 @@
                     editInput.remove();
                     card.find('.cardlist-card-name').text(cardName);
                     card.children('div').show();
+                }
+            })
+        }
+
+        // Kártya törlése
+        function deleteCard(caller) {
+            var cardListId = $(caller).closest('.cardlist-container').data('id');
+            var cardId = $(caller).closest('.cardlist-card').data('id');
+
+            $.post('@Url.Action(nameof(CardListController.RemoveCard), "CardList")', {
+                cardListId,
+                cardId
+            }).done(function (data) {
+                if (data.success) {
+                    $('.cardlist-card[data-id=' + cardId + ']').remove();
                 }
             })
         }
@@ -304,6 +326,9 @@
             <a class="btn btn-save" onclick="renameCard(this)">Mentés</a>
             <div class="cardlist-icon-cancel" onclick="toggleEditCardWindow(this)">
                 <span class="fas fa-times"></span>
+            </div>
+            <div class="cardlist-icon-delete">
+                <span class="fas fa-trash"></span>
             </div>
         </div>
     </div>
