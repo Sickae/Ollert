@@ -234,6 +234,7 @@ html {
 /* Board stylings */
 
 .cardlist-list {
+    display: flex;
     position: absolute;
     margin-top: 2%;
     margin-left: auto;
