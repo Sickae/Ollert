@@ -74,6 +74,21 @@
             }
         });
 
+        // Kártya szerkesztésnél mentés gomb aktiválása/deaktiválása
+        $(document).on('keyup', '.edit-card-input .cardlist-card-name-input', function () {
+            var name = $(this).text();
+            $(this).closest('.edit-card-input').find('.btn-save').toggleClass('disabled', name.length === 0 || name.length > 255);
+        });
+
+        // Kártya szerkesztés mentése
+        $(document).on('click', '.edit-card-input .btn-save', function () {
+            var card = $(this).closest('.cardlist-card');
+            var cardId = card.data('id');
+            var cardName = card.find('.cardlist-card-name-input').text();
+
+            renameCard(cardId, cardName);
+        });
+
         // Kártya törlése
         $(document).on('click', '.cardlist-icon-delete', function () {
             deleteCard(this);
@@ -113,14 +128,6 @@
                 var originalName = $('.cardlist-card[data-id=' + cardId + ']').find('.cardlist-card-name').text();
                 $(this).text(originalName).blur();
             }
-        });
-
-        $(document).on('click', '.edit-card-input .btn-save', function () {
-            var card = $(this).closest('.cardlist-card');
-            var cardId = card.data('id');
-            var cardName = card.find('.cardlist-card-name-input').text();
-
-            renameCard(cardId, cardName);
         });
 
         // Helper functions
