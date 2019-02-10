@@ -44,11 +44,13 @@ namespace Ollert
             services.AddScoped<ICardManager, CardManager>();
             services.AddScoped<ICommentManager, CommentManager>();
             services.AddScoped<ILabelManager, LabelManager>();
+            services.AddScoped<ICategoryManager, CategoryManager>();
 
             // repository osztályok
             services.AddScoped<BoardRepository>();
             services.AddScoped<CardListRepository>();
             services.AddScoped<CardRepository>();
+            services.AddScoped<CategoryRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -72,7 +74,7 @@ namespace Ollert
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Board}/{action=BoardList}/{id?}");
+                    template: "{controller=Category}/{action=CategoryList}/{id?}");
             });
 
             // ISO-8859-2 támogatás

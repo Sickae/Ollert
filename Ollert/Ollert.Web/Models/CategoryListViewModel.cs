@@ -3,8 +3,8 @@ using System.Collections.Generic;
 
 namespace Ollert.Web.Models
 {
-    public class BoardListViewModel
+    public class CategoryListViewModel
     {
-        public IList<BoardDTO> Boards { get; set; }
+        public IList<CategoryDTO> Categories { get; set; }
     }
 }

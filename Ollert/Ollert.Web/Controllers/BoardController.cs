@@ -16,14 +16,6 @@ namespace Ollert.Web.Controllers
             _boardRepository = boardRepository;
         }
 
-        public IActionResult BoardList()
-        {
-            var boards = _boardRepository.GetAll();
-            var vm = new BoardListViewModel { Boards = boards };
-            SetTitle("Táblák");
-            return View(vm);
-        }
-
         public IActionResult New()
         {
             return Board(0);

@@ -1,30 +1,35 @@
 ﻿@using Ollert.DataAccess.Enums
 
-@model BoardListViewModel
+@model CategoryListViewModel
+
+@section Scripts {
+
+    <script type="text/javascript">
+
+        $(document).on('click', '.category-new', function () {
+            $.post('@Url.Action(nameof(CategoryController.AddNewCategory), "Category")', {
+                categoryName: 'TEST_CATEGORY'
+            }).done(function (data) {
+                if (data.success) {
+                    console.log(data.category);
+                }
+            });
+        }); 
+
+    </script>
+
+}
 
 <div class="row board-list-container">
-    @foreach (var boardGroup in Model.Boards.GroupBy(x => x.Type))
+    @foreach (var category in Model.Categories.OrderBy(x => x.ModificationDate))
     {
         <div class="board-list">
-            <div class="board-list-title">
-                @switch (boardGroup.Key)
-                {
-                    case BoardType.Public:
-                    {
-                        <span class="fas fa-globe"></span>
-                        <label>Publikus</label>
-                        break;
-                    }
-                    case BoardType.Private:
-                    {
-                        <span class="fas fa-lock"></span>
-                        <label>Privát</label>
-                        break;
-                    }
-                }
+            <div class="category">
+                <span class="fas fa-hashtag"></span>
+                @category.Name
             </div>
             <ul>
-                @foreach (var board in boardGroup)
+                @foreach (var board in category.Boards)
                 {
                     <li>
                         <div class="board-list-item">
@@ -48,4 +53,9 @@
             </ul>
         </div>
     }
+
+    <a class="category-new">
+        <span class="fas fa-times"></span>
+        Új kategória hozzáadása
+    </a>
 </div>
