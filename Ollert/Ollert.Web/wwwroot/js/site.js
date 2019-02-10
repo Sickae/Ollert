@@ -1,4 +1,20 @@
-﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
-
-// Write your Javascript code.
+﻿// jQuery caret pluginhoz kiegészítő, ez csak contentEditable elemeken működik
+function setDivCaretToEnd(contentEditableElement) {
+    var range, selection;
+    if (document.createRange)
+    {
+        range = document.createRange();
+        range.selectNodeContents(contentEditableElement);
+        range.collapse(false);
+        selection = window.getSelection();
+        selection.removeAllRanges();
+        selection.addRange(range);
+    }
+    else if (document.selection)
+    {
+        range = document.body.createTextRange();
+        range.moveToElementText(contentEditableElement);
+        range.collapse(false);
+        range.select();
+    }
+}

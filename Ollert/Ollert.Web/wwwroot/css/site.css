@@ -128,6 +128,12 @@ html {
     display: none;
 }
 
+div[contenteditable=true]:empty:before {
+    content: attr(placeholder);
+    padding-top: 2px;
+    color: #83898e;
+}
+
 /* BoardList stylings */
 
 .board-list-container {
@@ -311,14 +317,14 @@ html {
     color: #17394d;
     padding: 5px;
     background-color: inherit;
-    border: none;
+    border: 2px solid transparent;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
     cursor: pointer;
 }
 
-.cardlist-title.edit {
+.cardlist-title:focus {
     border: 2px solid #227ebf;
     border-radius: 5px;
     background-color: #fff;
@@ -376,18 +382,17 @@ html {
     border-radius: 0 0 5px 5px;
 }
 
-textarea.cardlist-card-name-input {
-    border: none;
+.cardlist-card-name-input {
     width: 100%;
-    height: auto;
-    resize: none;
-    overflow: hidden;
-    padding: 0;
+    min-height: 20px;
+    height: auto !important;
     background-color: #fff;
-}
-
-textarea.cardlist-card-name-input::placeholder {
-    color: #83898e;
+    cursor: text;
+    -webkit-user-select: text;
+    -khtml-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
 }
 
 .empty-card-input > .cardlist-card:hover {
@@ -539,7 +544,7 @@ textarea.cardlist-card-name-input::placeholder {
     margin-bottom: 10px;
     color: #17394d;
     font-weight: 700;
-    background-color: #f0f0f0;
+    background-color: #fff;
     padding: 0 5px;
 }
 
@@ -620,22 +625,28 @@ a.btn-save {
 }
 
 .card-details-title {
-    width: 90%;
-    height: 40px;
+    width: 87%;
+    min-height: 40px;
+    height: auto !important;
     padding: 4px;
-    border: none;
-    background-color: inherit;
+    margin-left: -4px;
+    margin-right: 15px;
+    border: 2px solid transparent;
     font-size: 20px;
     font-weight: 700;
-    resize: none;
-    overflow: hidden;
     cursor: pointer;
+    word-wrap: break-word;
+    -webkit-user-select: text;
+    -khtml-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
 }
 
-.card-details-title.edit {
+.card-details-title:focus {
+    height: auto !important;
     border: 2px solid #227ebf;
     border-radius: 5px;
-    padding: 2px;
     background-color: #fff;
     cursor: text;
 }

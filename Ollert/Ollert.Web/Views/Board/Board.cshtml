@@ -5,6 +5,11 @@
 
         // Event listener-ek regisztrálása
 
+        // ContentEditable div-ekből törli a böngésző által beszúrt <br> tageket
+        $(document).on('keyup blur', 'div[contenteditable=true]', function () {
+            $(this).children('br').remove();
+        });
+
         // Új lista hozzáadásnál Enter és Esc gombok működése
         $(document).on('keyup', '.cardlist-new-input', function (event) {
             if (event.keyCode === 13) { // Enter
@@ -14,11 +19,6 @@
             }
         });
 
-        // Lista címére kattintva szerkeszthetővé teszi
-        $(document).on('focus', '.cardlist-title', function () {
-            $(this).addClass('edit');
-        });
-
         // Lista cím input kikattintásánál elmenti a módosításokat
         $(document).on('blur', '.cardlist-title', function () {
             if ($(this).val().length > 0) {
@@ -26,7 +26,6 @@
             } else {
                 $(this).val($(this).data('title'));
             }
-            $(this).removeClass('edit');
             $(this).caretToStart();
         });
 
@@ -51,41 +50,27 @@
             hideCardDetails();
         });
 
-        // Új kártya hozzáadásnál meggátolja az új sort Enter leütésénél Shift nélkül
-        $(document).on('keydown', '.empty-card-input .cardlist-card-name-input', function (event) {
-            if (event.keyCode === 13 && !event.shiftKey) {
-                event.preventDefault();
-            }
-            resizeTextArea(this);
-        });
-
         // Új kártya hozzáadásnál Enter és Esc gombok működése
-        $(document).on('keyup', '.empty-card-input .cardlist-card-name-input', function (event) {
-            if (event.keyCode === 13 && !event.shiftKey) {
+        $(document).on('keydown', '.empty-card-input .cardlist-card-name-input', function (event) {
+            if (event.keyCode === 13) {
+                event.preventDefault();
                 addNewCard(this);
             } else if (event.keyCode === 27) {
                 toggleNewCardWindow(this);
-            } else {
-                resizeTextArea(this);
             }
-        });
-
-        // Kártya szerkesztésnél meggátolja az új sort Enter leütésénél Shift nélkül
-        $(document).on('keydown', '.edit-card-input .cardlist-card-name-input', function (event) {
-            if (event.keyCode === 13 && !event.shiftKey) {
-                event.preventDefault();
-            }
-            resizeTextArea(this);
         });
 
         // Kártya szerkesztésnél Enter és Esc gombok működése
-        $(document).on('keyup', '.edit-card-input .cardlist-card-name-input', function (event) {
-            if (event.keyCode === 13 && !event.shiftKey) {
-                renameCard(this);
+        $(document).on('keydown', '.edit-card-input .cardlist-card-name-input', function (event) {
+            if (event.keyCode === 13) {
+                event.preventDefault();
+                var card = $(this).closest('.cardlist-card');
+                var cardId = card.data('id');
+                var cardName = card.find('.cardlist-card-name-input').text();
+
+                renameCard(cardId, cardName);
             } else if (event.keyCode === 27) {
                 toggleEditCardWindow(this);
-            } else {
-                resizeTextArea(this);
             }
         });
 
@@ -99,41 +84,43 @@
             hideCardDetails();
         });
 
-        // Kártya nézetben címre kattintva szerkesztő formázás
-        $(document).on('click', '.card-details-title', function () {
-            $(this).addClass('edit');
-        });
-
         // Kártya nézetben címből kikattintva vissza az eredeti formázásra és a módosítások mentése ha kell
         $(document).on('blur', '.card-details-title', function () {
             var cardId = $(this).closest('.card-details').data('id');
-            var cardName = $(this).val();
+            var cardName = $(this).text();
+            var title = $(this).text();
 
-            $(this).removeClass('edit');
-            $(this).caretToStart();
-            resizeTextArea(this, 40);
-
-            if ($(this).val().length > 0) {
+            if (title.length > 0 && title.length <= 255) {
                 renameCard(cardId, cardName);
             } else {
                 var originalName = $('.cardlist-card[data-id=' + cardId + ']').find('.cardlist-card-name').text();
-                $(this).val(originalName);
+                $(this).text(originalName);
             }
         });
 
         // Kártya nézetben cím szerkesztésnél Enter és Esc gombok működése
-        $(document).on('keydown keyup', '.card-details-title', function (event) {
+        $(document).on('keydown', '.card-details-title', function (event) {
             var cardId = $(this).closest('.card-details').data('id');
 
-            if (event.keyCode === 13 && !event.shiftKey) {
-                $(this).blur();
+            if (event.keyCode === 13) {
+                event.preventDefault();
+                var title = $(this).text();
+                if (title.length > 0 && title.length <= 255) {
+                    $(this).blur();
+                }
             }
             else if (event.keyCode === 27) {
                 var originalName = $('.cardlist-card[data-id=' + cardId + ']').find('.cardlist-card-name').text();
-                $(this).val(originalName).blur();
-            } else {
-                resizeTextArea(this, 40);
+                $(this).text(originalName).blur();
             }
+        });
+
+        $(document).on('click', '.edit-card-input .btn-save', function () {
+            var card = $(this).closest('.cardlist-card');
+            var cardId = card.data('id');
+            var cardName = card.find('.cardlist-card-name-input').text();
+
+            renameCard(cardId, cardName);
         });
 
         // Helper functions
@@ -210,11 +197,10 @@
             var cardDesc = card.find('#card_Description').val();
 
             cardDetails.attr('data-id', card.data('id'));
-            cardDetails.find('.card-details-title').val(cardName);
+            cardDetails.find('.card-details-title').text(cardName);
             cardDetails.find('.card-details-description-text').val(cardDesc);
 
             $('body').append(dimmer).append(cardDetails);
-            resizeTextArea(cardDetails.find('.card-details-title')[0], 30);
         }
 
         // Kártya nézet elrejtése
@@ -256,12 +242,14 @@
                 var cardId = card.data('id');
                 var cardName = card.find('.cardlist-card-name').text();
                 var cardInput = $('.helper-divs > .edit-card-input').clone();
+                var cardNameInput = cardInput.find('.cardlist-card-name-input');
 
                 card.addClass('edit');
                 card.children('div').hide();
                 card.append(cardInput);
                 cardInput.find('.cardlist-card').attr('data-id', cardId);
-                cardInput.find('.cardlist-card-name-input').val(cardName).focus();
+                cardNameInput.text(cardName).focus();
+                setDivCaretToEnd(cardNameInput[0]);
             }
         }
 
@@ -269,7 +257,7 @@
         function addNewCard(caller) {
             var emptyCard = $('.helper-divs > .empty-card > .cardlist-card').clone();
             var listContainer = $(caller).closest('.cardlist-container');
-            var cardName = $(caller).closest('.empty-card-input').find('.cardlist-card-name-input').val();
+            var cardName = $(caller).closest('.empty-card-input').find('.cardlist-card-name-input').text();
             var cardDesc = $('<input id="card_Description" type="hidden">');
 
             $.post('@Url.Action(nameof(CardListController.AddNewCard), "CardList")', {
@@ -287,24 +275,6 @@
             });
         }         
 
-        // Kártya átnevezése (szerkesztés ablakból)
-        function renameCard(caller) {
-            var cardName = $(caller).closest('.cardlist-card').find('.cardlist-card-name-input').val();
-            var editInput = $(caller).closest('.edit-card-input');
-            var card = editInput.closest('.cardlist-card');
-
-            $.post('@Url.Action(nameof(CardController.Rename), "Card")', {
-                id: card.data('id'),
-                cardName
-            }).done(function (data) {
-                if (data.success) {
-                    editInput.remove();
-                    card.find('.cardlist-card-name').text(cardName);
-                    card.children('div').show();
-                }
-            });
-        }
-
         // Kártya átnevezés (nézet ablakból)
         function renameCard(cardId, cardName) {
             $.post('@Url.Action(nameof(CardController.Rename), "Card")', {
@@ -314,6 +284,7 @@
                 if (data.success) {
                     var card = $('.cardlist-card[data-id=' + cardId + ']');
                     card.find('.cardlist-card-name').text(cardName);
+                    toggleEditCardWindow(card[1]);
                 }
             });
         }
@@ -405,7 +376,7 @@
     @* Kártya létrehozás *@
     <div class="empty-card-input">
         <div class="cardlist-card">
-            <textarea class="cardlist-card-name-input" placeholder="Kártya neve..." spellcheck="false" maxlength="255"></textarea>
+            <div class="cardlist-card-name-input" contenteditable="true" placeholder="Kártya neve..." spellcheck="false"></div>
         </div>
         <div class="empty-card-input-control">
             <a class="btn btn-save" onclick="addNewCard(this)">Mentés</a>
@@ -418,10 +389,10 @@
     @* Kártya szerkesztés *@
     <div class="edit-card-input">
         <div class="cardlist-card">
-            <textarea class="cardlist-card-name-input" placeholder="Kártya neve..." spellcheck="false" maxlength="255"></textarea>
+            <div class="cardlist-card-name-input" contenteditable="true" placeholder="Kártya neve..." spellcheck="false"></div>
         </div>
         <div class="edit-card-input-control">
-            <a class="btn btn-save" onclick="renameCard(this)">Mentés</a>
+            <a class="btn btn-save">Mentés</a>
             <div class="cardlist-icon-cancel" onclick="toggleEditCardWindow(this)">
                 <span class="fas fa-times"></span>
             </div>
@@ -470,7 +441,7 @@
             <div class="card-details-icon">
                 <span class="fas fa-clipboard"></span>
             </div>
-            <textarea class="card-details-title" placeholder="Kártya neve..." spellcheck="false" maxlength="255"></textarea>
+            <div class="card-details-title" contenteditable="true" placeholder="Kártya neve..." spellcheck="false"></div>
             <div class="card-details-icon card-details-close">
                 <span class="fas fa-times"></span>
             </div>
