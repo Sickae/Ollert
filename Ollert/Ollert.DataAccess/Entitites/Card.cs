@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Ollert.DataAccess.Attributes;
+using System.Collections.Generic;
 
 namespace Ollert.DataAccess.Entitites
 {
@@ -6,6 +7,7 @@ namespace Ollert.DataAccess.Entitites
     {
         public virtual string Name { get; set; }
 
+        [MaxLength]
         public virtual string Description { get; set; }
 
         public virtual IEnumerable<Label> Labels { get; set; }

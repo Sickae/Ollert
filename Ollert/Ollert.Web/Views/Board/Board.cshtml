@@ -5,9 +5,11 @@
 
         // Event listener-ek regisztrálása
 
-        // ContentEditable div-ekből törli a böngésző által beszúrt <br> tageket
+        // ContentEditable div-ekből törli a böngésző által beszúrt <br> tageket ha nincs szöveg
         $(document).on('keyup blur', 'div[contenteditable=true]', function () {
-            $(this).children('br').remove();
+            if ($(this).text().length === 0) {
+                $(this).children('br').remove();
+            }
         });
 
         // Új lista hozzáadásnál Enter és Esc gombok működése
@@ -103,9 +105,8 @@
         $(document).on('blur', '.card-details-title', function () {
             var cardId = $(this).closest('.card-details').data('id');
             var cardName = $(this).text();
-            var title = $(this).text();
 
-            if (title.length > 0 && title.length <= 255) {
+            if (cardName.length > 0 && cardName.length <= 255) {
                 renameCard(cardId, cardName);
             } else {
                 var originalName = $('.cardlist-card[data-id=' + cardId + ']').find('.cardlist-card-name').text();
@@ -130,17 +131,76 @@
             }
         });
 
-        // Helper functions
+        // Kártya nézetben leírás mező szerkesztése
+        $(document).on('blur', '.card-details-description-text', function () {
+            var cardId = $(this).closest('.card-details').data('id');
+            var cardDesc = $(this).text();
 
-        // Textarea (pl. új kártya input mező) automatikus átméretezése
-        function resizeTextArea(textarea, defaultHeight) {
-            var def = defaultHeight === undefined ? 'auto' : defaultHeight + 'px';
-
-            if (defaultHeight === undefined || textarea.scrollHeight > defaultHeight) {
-                $(textarea).css('height', def);
-                $(textarea).css('height', textarea.scrollHeight + 'px');
+            if (cardDesc.length > 0) {
+                $.post('@Url.Action(nameof(CardController.SetDescription), "Card")', {
+                    id: cardId,
+                    description: cardDesc
+                }).done(function (data) {
+                    if (data.success) {
+                        $('.cardlist-card[data-id=' + cardId + ']').find('#card_Description').val(cardDesc);
+                    }
+                });
+            } else {
+                var originalDesc = $('.cardlist-card[data-id=' + cardId + ']').find('#card_Description').val();
+                $(this).text(originalDesc);
             }
-        }
+        });
+
+        // Kártya nézetben leírás mező szerkesztésnél Esc gomb működése
+        $(document).on('keydown', '.card-details-description-text', function (event) {
+            if (event.keyCode === 27) {
+                $(this).text('').blur();
+            }
+        });
+
+        // Kártya nézetben új komment név megadás után kurzor előre mozgatása
+        $(document).on('blur', '.comment-new-author', function () {
+            $(this).caretToStart();
+        });
+
+        // Kártya nézetben új komment mezőben Esc gomb működése
+        $(document).on('keydown', '.comment-new-text', function (event) {
+            if (event.keyCode === 27) {
+                $(this).text('').blur();
+            }
+        });
+
+        // Kártya nézetben új komment mentés gomb aktiválása/deaktiválása
+        $(document).on('keydown keyup', '.comment-new-text', function () {
+            $(this).siblings('.btn-save').toggleClass('disabled', $(this).text().length === 0);
+        });
+
+        // Kártya nézetben új komment mentése
+        $(document).on('click', '.comment-new > .btn-save', function () {
+            var comment = $(this).closest('.comment-new');
+            var author = comment.find('.comment-new-author').val();
+            var text = comment.find('.comment-new-text').text();
+            var cardId = comment.closest('.card-details').data('id');
+
+            if (text.length > 0) {
+                $.post('@Url.Action(nameof(CardController.AddNewComment), "Card")', {
+                    id: cardId,
+                    author,
+                    text
+                }).done(function (data) {
+                    if (data.success) {
+                        var newComment = $('.helper-divs > .comment').clone();
+
+                        newComment.find('.comment-author').text(author);
+                        newComment.find('.comment-date').text(data.date);
+                        newComment.find('.comment-text').text(text);
+
+                        comment.find('.comment-new-text').text('').blur();
+                        comment.closest('.card-details-content').find('.card-details-comments').append(newComment);
+                    }
+                })
+            }
+        });
 
         // CardList functions
 
@@ -202,10 +262,12 @@
             var card = $(caller).closest('.cardlist-card');
             var cardName = card.find('.cardlist-card-name').text();
             var cardDesc = card.find('#card_Description').val();
+            var commentDiv = card.find('.cardlist-card-comments').children().clone();
 
             cardDetails.attr('data-id', card.data('id'));
             cardDetails.find('.card-details-title').text(cardName);
-            cardDetails.find('.card-details-description-text').val(cardDesc);
+            cardDetails.find('.card-details-description-text').text(cardDesc);
+            cardDetails.find('.card-details-comments').append(commentDiv);
 
             $('body').append(dimmer).append(cardDetails);
         }
@@ -331,6 +393,16 @@
                 {
                     <div class="cardlist-card" data-id="@card.Id">
                         @Html.HiddenFor(x => card.Description)
+                        <div class="cardlist-card-comments" style="display: none">
+                            @foreach (var comment in card.Comments.OrderBy(x => x.CreationDate))
+                            {
+                                <div class="comment">
+                                    <div class="comment-author user-select-none">@comment.Author</div>
+                                    <div class="comment-date muted user-select-none">@comment.CreationDate.ToLocalTime()</div>
+                                    <div class="comment-text">@comment.Text</div>
+                                </div>
+                            }
+                        </div>
                         <div class="cardlist-card-icon cardlist-card-icon-edit">
                             <a onclick="toggleEditCardWindow(this)">
                                 <span class="fas fa-pencil-alt"></span>
@@ -347,7 +419,7 @@
                             @if (card.Comments.Any())
                             {
                                 <div class="cardlist-card-icon cardlist-card-icon-comment">
-                                    <span class="fas fa-comment"></span>
+                                    <span class="fas fa-comment muted"></span>
                                     @card.Comments.Count
                                 </div>
                             }
@@ -367,7 +439,7 @@
             <input class="cardlist-new-input" placeholder="Cím..." maxlength="255" />
             <div class="cardlist-new-control">
                 <a class="btn btn-save" onclick="addNewCardList()">Mentés</a>
-                <div class="cardlist-icon-cancel quiet" onclick="toggleNewCardListWindow()">
+                <div class="cardlist-icon-cancel muted" onclick="toggleNewCardListWindow()">
                     <span class="fas fa-times"></span>
                 </div>
             </div>
@@ -400,7 +472,7 @@
         </div>
         <div class="edit-card-input-control">
             <a class="btn btn-save">Mentés</a>
-            <div class="cardlist-icon-cancel quiet" onclick="toggleEditCardWindow(this)">
+            <div class="cardlist-icon-cancel muted" onclick="toggleEditCardWindow(this)">
                 <span class="fas fa-times"></span>
             </div>
             <div class="cardlist-icon-delete">
@@ -455,7 +527,7 @@
         </div>
         <div class="card-details-body">
             <div class="card-details-side-menu">
-                <div class="card-details-side-menu-section quiet user-select-none">Műveletek</div>
+                <div class="card-details-side-menu-section muted user-select-none">Műveletek</div>
                 <a href="#" class="btn btn-card-action">
                     <span class="fas fa-arrow-right"></span>
                     Mozgatás
@@ -466,14 +538,41 @@
                 </a>
             </div>
             <div class="card-details-content">
-                <div class="card-details-description">
+                <div class="card-details-group">
                     <div class="card-details-icon">
-                        <span class="fas fa-bars"></span>
+                        <span class="fas fa-bars icon-large"></span>
                     </div>
-                    <div class="card-details-description-title">Leírás</div>
+                    <div class="card-details-label user-select-none">Leírás</div>
                 </div>
-                <textarea class="card-details-description-text" placeholder="Leírás..." spellcheck="false"></textarea>
+                <div class="card-details-description-text" contenteditable="true" placeholder="Leírás hozzáadása..." spellcheck="false"></div>
+
+                <div class="card-details-group">
+                    <div class="card-details-icon">
+                        <span class="fas fa-comments icon-large"></span>
+                    </div>
+                    <div class="card-details-label user-select-none">Kommentek</div>
+                </div>
+                <div class="card-details-comments"></div>
+
+                <div class="card-details-group">
+                    <div class="card-details-icon">
+                        <span class="fas fa-comment-dots icon-large"></span>
+                    </div>
+                    <div class="card-details-label user-select-none">Új komment</div>
+                </div>
+                <div class="comment-new">
+                    <input class="comment-new-author" maxlength="255" placeholder="Név" />
+                    <div class="comment-new-text" contenteditable="true" placeholder="Új komment hozzáadása..." spellcheck="true"></div>
+                    <a class="btn btn-save disabled">Mentés</a>
+                </div>
             </div>
         </div>
+    </div>
+
+    @* Komment mock *@
+    <div class="comment">
+        <div class="comment-author user-select-none"></div>
+        <div class="comment-date muted user-select-none"></div>
+        <div class="comment-text user-select-none"></div>
     </div>
 </div>

@@ -36,5 +36,25 @@ namespace Ollert.Logic.Repositories
         {
             throw new NotImplementedException();
         }
+
+        public int AddNewComment(int id, string author, string text)
+        {
+            if (string.IsNullOrWhiteSpace(author) || author.Length == 0)
+            {
+                author = "Anoním";
+            }
+
+            var card = Get(id);
+            var comment = new CommentDTO
+            {
+                Author = author,
+                Text = text
+            };
+
+            card.Comments.Add(comment);
+            Save(card);
+
+            return comment.Id;
+        }
     }
 }
