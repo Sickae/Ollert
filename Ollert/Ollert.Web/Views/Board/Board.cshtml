@@ -355,7 +355,7 @@
                     </div>
                 }
             </div>
-            <div class="cardlist-card-new" onclick="toggleNewCardWindow(this)">
+            <div class="cardlist-card-new user-select-none" onclick="toggleNewCardWindow(this)">
                 <span class="fas fa-plus"></span>
                 Új kártya hozzáadása
             </div>
@@ -367,12 +367,12 @@
             <input class="cardlist-new-input" placeholder="Cím..." maxlength="255" />
             <div class="cardlist-new-control">
                 <a class="btn btn-save" onclick="addNewCardList()">Mentés</a>
-                <div class="cardlist-icon-cancel" onclick="toggleNewCardListWindow()">
+                <div class="cardlist-icon-cancel quiet" onclick="toggleNewCardListWindow()">
                     <span class="fas fa-times"></span>
                 </div>
             </div>
         </div>
-        <div class="cardlist-content cardlist-new" onclick="toggleNewCardListWindow()">
+        <div class="cardlist-content cardlist-new user-select-none" onclick="toggleNewCardListWindow()">
             <span class="fas fa-plus"></span>
             Új lista hozzáadása
         </div>
@@ -383,7 +383,7 @@
     @* Kártya létrehozás *@
     <div class="empty-card-input">
         <div class="cardlist-card">
-            <div class="cardlist-card-name-input" contenteditable="true" placeholder="Kártya neve..." spellcheck="false"></div>
+            <div class="cardlist-card-name-input user-select-text" contenteditable="true" placeholder="Kártya neve..." spellcheck="false"></div>
         </div>
         <div class="empty-card-input-control">
             <a class="btn btn-save" onclick="addNewCard(this)">Mentés</a>
@@ -396,11 +396,11 @@
     @* Kártya szerkesztés *@
     <div class="edit-card-input">
         <div class="cardlist-card">
-            <div class="cardlist-card-name-input" contenteditable="true" placeholder="Kártya neve..." spellcheck="false"></div>
+            <div class="cardlist-card-name-input user-select-text" contenteditable="true" placeholder="Kártya neve..." spellcheck="false"></div>
         </div>
         <div class="edit-card-input-control">
             <a class="btn btn-save">Mentés</a>
-            <div class="cardlist-icon-cancel" onclick="toggleEditCardWindow(this)">
+            <div class="cardlist-icon-cancel quiet" onclick="toggleEditCardWindow(this)">
                 <span class="fas fa-times"></span>
             </div>
             <div class="cardlist-icon-delete">
@@ -446,16 +446,16 @@
     <div class="card-details">
         <div class="card-details-header">
             <div class="card-details-icon">
-                <span class="fas fa-clipboard"></span>
+                <span class="fas fa-clipboard icon-large"></span>
             </div>
-            <div class="card-details-title" contenteditable="true" placeholder="Kártya neve..." spellcheck="false"></div>
-            <div class="card-details-icon card-details-close">
+            <div class="card-details-title user-select-text" contenteditable="true" placeholder="Kártya neve..." spellcheck="false"></div>
+            <div class="card-details-icon icon-large card-details-close">
                 <span class="fas fa-times"></span>
             </div>
         </div>
         <div class="card-details-body">
             <div class="card-details-side-menu">
-                <div class="card-details-side-menu-section">Műveletek</div>
+                <div class="card-details-side-menu-section quiet user-select-none">Műveletek</div>
                 <a href="#" class="btn btn-card-action">
                     <span class="fas fa-arrow-right"></span>
                     Mozgatás
