@@ -95,10 +95,15 @@ html {
     display: none;
 }
 
-div[contenteditable=true]:empty:before {
+div[contenteditable=true]:empty::before {
     content: attr(placeholder);
     padding-top: 2px;
     color: #7a848d;
+}
+
+input::placeholder {
+    color: #7a848d;
+    opacity: 1;
 }
 
 .icon-small {
