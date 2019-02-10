@@ -1,6 +1,5 @@
 ﻿using NHibernate;
 using Ollert.Logic.DTOs;
-using Ollert.Logic.Interfaces;
 using Ollert.Logic.Managers;
 using Ollert.Logic.Managers.Interfaces;
 using Ollert.Logic.Repositories.Interfaces;
@@ -13,8 +12,7 @@ namespace Ollert.Logic.Repositories
     {
         private readonly ICommentManager _commentManager;
 
-        public CardRepository(ICommentManager commentManager, ISession session, IAppContext appContext)
-            : base(session, appContext)
+        public CardRepository(ICommentManager commentManager, ISession session) : base(session)
         {
             _commentManager = commentManager;
         }

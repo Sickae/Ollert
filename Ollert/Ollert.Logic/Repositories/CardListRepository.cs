@@ -1,6 +1,5 @@
 ﻿using NHibernate;
 using Ollert.Logic.DTOs;
-using Ollert.Logic.Interfaces;
 using Ollert.Logic.Managers;
 using Ollert.Logic.Repositories.Interfaces;
 using System;
@@ -12,14 +11,9 @@ namespace Ollert.Logic.Repositories
     {
         private readonly CardRepository _cardRepository;
 
-        public CardListRepository(CardRepository cardRepository, ISession session, IAppContext appContext)
-            : base(session, appContext)
+        public CardListRepository(CardRepository cardRepository, ISession session) : base(session)
         {
             _cardRepository = cardRepository;
-        }
-
-        public CardListRepository(ISession session, IAppContext appContext) : base(session, appContext)
-        {
         }
 
         public override int Save(CardListDTO dto)

@@ -1,16 +1,10 @@
 ﻿using AutoMapper;
 using NHibernate;
-using NHibernate.Exceptions;
-using Npgsql;
 using Ollert.DataAccess.Entitites;
 using Ollert.Logic.DTOs;
-using Ollert.Logic.Helpers;
-using Ollert.Logic.Interfaces;
 using Ollert.Logic.Managers.Interfaces;
-using Serilog;
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 
 namespace Ollert.Logic.Managers
@@ -21,87 +15,45 @@ namespace Ollert.Logic.Managers
     /// <typeparam name="TEntity"></typeparam>
     public abstract class ManagerBase<TEntity, TDto> : ManagerBase, IManagerBase<TEntity, TDto> where TEntity : Entity where TDto : DTOBase
     {
-        public ManagerBase(ISession session, IAppContext appContext) : base(session, appContext)
+        public ManagerBase(ISession session) : base(session)
         { }
 
         public void Delete(int id)
         {
-            try
+            InTransaction(() =>
             {
-                InTransaction(() =>
+                var entity = _session.Get<TEntity>(id);
+                if (entity == null)
                 {
-                    var entity = _session.Get<TEntity>(id);
-                    if (entity == null)
-                    {
-                        Log.Logger.Error($"Null entity with id {id} during Delete.");
-                        return;
-                    }
-
-                    OnDeleting(entity);
-                    _session.Delete(entity);
-                });
-            }
-            catch (GenericADOException ex)
-            {
-                Log.Logger.Error(ex, "Commit error during Delete.");
-
-                if (ex.InnerException is PostgresException pgex)
-                {
-                    if (pgex.SqlState == Constants.ErrorCodes.SqlUniqueKeyViolation)
-                    {
-                        throw new ConstraintException("Foreign key rule violated.", pgex);
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    return;
                 }
-            }
+
+                OnDeleting(entity);
+                _session.Delete(entity);
+            });
         }
 
         public void Delete(IList<int> ids)
         {
             if (ids == null)
             {
-                Log.Logger.Error("Null id list during Delete.");
                 return;
             }
 
-            try
+            InTransaction(() =>
             {
-                InTransaction(() =>
+                foreach (var id in ids)
                 {
-                    foreach (var id in ids)
+                    var entity = _session.Get<TEntity>(id);
+                    if (entity == null)
                     {
-                        var entity = _session.Get<TEntity>(id);
-                        if (entity == null)
-                        {
-                            Log.Logger.Error($"Null entity with id {id} during Delete.");
-                            // TODO jó ötlet megszakítani az egész törlést? nem lesz rollback
-                            return;
-                        }
+                        return;
+                    }
 
-                        OnDeleting(entity);
-                        _session.Delete(entity);
-                    }
-                });
-            }
-            catch (GenericADOException ex)
-            {
-                Log.Logger.Error(ex, "Commit error during Delete.");
-
-                if (ex.InnerException is PostgresException pgex)
-                {
-                    if (pgex.SqlState == Constants.ErrorCodes.SqlUniqueKeyViolation)
-                    {
-                        throw new ConstraintException("Foreign key rule violated.", pgex);
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    OnDeleting(entity);
+                    _session.Delete(entity);
                 }
-            }
+            });
         }
 
         public TDto Get(int id)
@@ -113,7 +65,6 @@ namespace Ollert.Logic.Managers
         {
             if (ids == null)
             {
-                Log.Logger.Error("Null id list during Delete.");
                 return new List<TDto>();
             }
 
@@ -140,7 +91,6 @@ namespace Ollert.Logic.Managers
         {
             if (entity == null)
             {
-                Log.Logger.Error("Null entity during Save");
                 return 0;
             }
 
@@ -152,19 +102,12 @@ namespace Ollert.Logic.Managers
                 _session.Evict(cachedEntity);
             }
 
-            try
+            InTransaction(() =>
             {
-                InTransaction(() =>
-                {
-                    _session.SaveOrUpdate(entity);
-                });
-                return entity.Id;
-            }
-            catch (GenericADOException ex)
-            {
-                Log.Logger.Error(ex, "Commit error during Save.");
-                throw;
-            }
+                _session.SaveOrUpdate(entity);
+            });
+
+            return entity.Id;
         }
 
         protected virtual void OnDeleting(TEntity entity)
@@ -176,30 +119,18 @@ namespace Ollert.Logic.Managers
     public abstract class ManagerBase
     {
         protected readonly ISession _session;
-        protected readonly IAppContext _appContext;
 
-        public ManagerBase(ISession session, IAppContext appContext)
+        public ManagerBase(ISession session)
         {
             _session = session;
-            _appContext = appContext;
         }
 
         protected void InTransaction(Action method)
         {
             using (var transaction = _session.BeginTransaction())
             {
-                try
-                {
-                    method();
-                    transaction.Commit();
-                }
-                catch (Exception ex)
-                {
-                    Log.Logger.Error(ex, "Commit error.");
-                    transaction.Rollback();
-                    _session.Clear();
-                    throw;
-                }
+                method();
+                transaction.Commit();
             }
         }
     }
