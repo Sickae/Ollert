@@ -268,6 +268,12 @@ input::placeholder {
     background-color: #cccfd1;
     color: #17394d;
     padding: 5px 10px;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.cardlist-content::-webkit-scrollbar {
+    width: 0;
 }
 
 .cardlist-header {
@@ -389,6 +395,7 @@ input::placeholder {
     word-wrap: break-word;
     cursor: pointer;
     height: auto;
+    box-shadow: 0 1px 0 0 #99a8af;
 }
 
 .cardlist-card:last-child {
@@ -639,6 +646,12 @@ a.btn-save {
     position: relative;
     max-height: 90%;
     overflow-y: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.card-details-body::-webkit-scrollbar {
+    width: 0;
 }
 
 .card-details-content {
