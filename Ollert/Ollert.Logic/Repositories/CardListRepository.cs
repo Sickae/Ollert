@@ -2,7 +2,6 @@
 using Ollert.Logic.DTOs;
 using Ollert.Logic.Managers;
 using Ollert.Logic.Repositories.Interfaces;
-using System;
 using System.Linq;
 
 namespace Ollert.Logic.Repositories

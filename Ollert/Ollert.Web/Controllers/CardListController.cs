@@ -54,6 +54,18 @@ namespace Ollert.Web.Controllers
             return Json(new { success = true });
         }
 
+        public IActionResult RemoveAllCards(int id)
+        {
+            if (_cardListRepository.RemoveAllCards(id))
+            {
+                return Json(new { success = true });
+            }
+            else
+            {
+                return Json(new { success = false });
+            }
+        }
+
         public IActionResult Rename(int id, string cardListName)
         {
             if (!string.IsNullOrEmpty(cardListName) && cardListName.Length > 0 && cardListName.Length <= 255)
