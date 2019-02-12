@@ -10,10 +10,5 @@ namespace Ollert.Logic.Repositories
     {
         public CategoryRepository(ISession session) : base(session)
         { }
-
-        public void Delete(CategoryDTO dto)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

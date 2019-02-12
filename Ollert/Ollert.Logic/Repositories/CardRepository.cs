@@ -32,11 +32,6 @@ namespace Ollert.Logic.Repositories
             return base.Save(dto);
         }
 
-        public void Delete(CardDTO dto)
-        {
-            throw new NotImplementedException();
-        }
-
         public int AddNewComment(int id, string author, string text)
         {
             if (string.IsNullOrWhiteSpace(author) || author.Length == 0)

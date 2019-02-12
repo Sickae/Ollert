@@ -7,11 +7,8 @@ namespace Ollert.Logic.Managers.Interfaces
     public interface IManagerBase<T, TDto> : IManagerBase where T : Entity where TDto : DTOBase
     {
         TDto Get(int id);
-        IList<TDto> Get(IList<int> ids);
         IList<TDto> GetAll();
         int Save(TDto dto);
-        void Delete(int id);
-        void Delete(IList<int> ids);
     }
 
     public interface IManagerBase { }

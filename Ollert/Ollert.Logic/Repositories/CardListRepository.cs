@@ -30,10 +30,5 @@ namespace Ollert.Logic.Repositories
 
             return base.Save(dto);
         }
-
-        public void Delete(CardListDTO dto)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

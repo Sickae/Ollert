@@ -18,60 +18,9 @@ namespace Ollert.Logic.Managers
         public ManagerBase(ISession session) : base(session)
         { }
 
-        public void Delete(int id)
-        {
-            InTransaction(() =>
-            {
-                var entity = _session.Get<TEntity>(id);
-                if (entity == null)
-                {
-                    return;
-                }
-
-                OnDeleting(entity);
-                _session.Delete(entity);
-            });
-        }
-
-        public void Delete(IList<int> ids)
-        {
-            if (ids == null)
-            {
-                return;
-            }
-
-            InTransaction(() =>
-            {
-                foreach (var id in ids)
-                {
-                    var entity = _session.Get<TEntity>(id);
-                    if (entity == null)
-                    {
-                        return;
-                    }
-
-                    OnDeleting(entity);
-                    _session.Delete(entity);
-                }
-            });
-        }
-
         public TDto Get(int id)
         {
             return Mapper.Map<TEntity, TDto>(_session.Get<TEntity>(id));
-        }
-
-        public IList<TDto> Get(IList<int> ids)
-        {
-            if (ids == null)
-            {
-                return new List<TDto>();
-            }
-
-            var list = ids.Select(Get).ToList();
-            list.RemoveAll(x => x == null);
-
-            return list;
         }
 
         public IList<TDto> GetAll()
@@ -108,11 +57,6 @@ namespace Ollert.Logic.Managers
             });
 
             return entity.Id;
-        }
-
-        protected virtual void OnDeleting(TEntity entity)
-        {
-
         }
     }
 

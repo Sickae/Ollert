@@ -31,11 +31,6 @@ namespace Ollert.Logic.Repositories
             return base.Save(dto);
         }
 
-        public void Delete(BoardDTO dto)
-        {
-            throw new NotImplementedException();
-        }
-
         public bool RemoveCardList(int boardId, int cardListId)
         {
             var board = Get(boardId);
