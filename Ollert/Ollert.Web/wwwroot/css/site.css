@@ -434,7 +434,13 @@ input::placeholder {
     word-wrap: break-word;
     cursor: pointer;
     height: auto;
+    -webkit-box-shadow: 0 1px 0 0 #99a8af;
     box-shadow: 0 1px 0 0 #99a8af;
+}
+
+.edit-card-input .cardlist-card {
+    -webkit-box-shadow: none;
+    box-shadow: none;
 }
 
 .cardlist-card:last-child {
@@ -721,6 +727,7 @@ a.btn-card-action {
     height: 2.5em;
     color: #17394d !important;
     background-color: #caced1;
+    -webkit-box-shadow: 0 1px 0 0 #99a8af;
     box-shadow: 0 1px 0 0 #99a8af;
     font-weight: 700;
     text-decoration: none;
@@ -735,6 +742,7 @@ a.btn-card-action:hover {
 a.btn-card-action:active {
     color: #17394d !important;
     background-color: #9da5ac;
+    -webkit-box-shadow: 0 1px 0 0 #718086;
     box-shadow: 0 1px 0 0 #718086;
 }
 
@@ -778,10 +786,12 @@ a.btn-card-action:active > span {
 .card-details-description-text:empty {
     padding: 10px;
     background-color: #fff;
+    -webkit-box-shadow: 2px 2px 2px 0 #d0d0d0;
     box-shadow: 2px 2px 2px 0 #d0d0d0;
 }
 
 .card-details-description-text:empty:hover {
+    -webkit-box-shadow: 2px 2px 2px 0 #c0c0c0;
     box-shadow: 2px 2px 2px 0 #c0c0c0;
 }
 
@@ -794,6 +804,7 @@ a.btn-card-action:active > span {
     background-color: #fff;
     border: 2px solid #227ebf;
     cursor: text;
+    -webkit-box-shadow: none !important;
     box-shadow: none !important;
 }
 
@@ -825,6 +836,7 @@ a.btn-card-action:active > span {
     margin-top: 5px;
     padding: 5px;
     background-color: #fff;
+    -webkit-box-shadow: 0 1px 0 0 #99a8af;
     box-shadow: 0 1px 0 0 #99a8af;
     border-radius: 3px;
 }
@@ -838,11 +850,13 @@ a.btn-card-action:active > span {
     padding: 5px;
     border-radius: 5px;
     text-overflow: ellipsis;
+    -webkit-box-shadow: 2px 2px 2px 0 #d0d0d0;
     box-shadow: 2px 2px 2px 0 #d0d0d0;
     cursor: pointer;
 }
 
 .comment-new-author:hover {
+    -webkit-box-shadow: 2px 2px 2px 0 #c0c0c0;
     box-shadow: 2px 2px 2px 0 #c0c0c0;
 }
 
@@ -852,11 +866,13 @@ a.btn-card-action:active > span {
 
 .comment-new-author:focus {
     border: 2px solid #227ebf;
+    -webkit-box-shadow: none;
     box-shadow: none;
     cursor: text;
 }
 
 .comment-new-author:focus {
+    -webkit-box-shadow: none;
     box-shadow: none;
     border: 2px solid #227ebf;
     cursor: text;
@@ -875,11 +891,13 @@ a.btn-card-action:active > span {
     border: 2px solid transparent;
     border-radius: 5px;
     background-color: #fff;
+    -webkit-box-shadow: 2px 2px 2px 0 #d0d0d0;
     box-shadow: 2px 2px 2px 0 #d0d0d0;
     cursor: pointer;
 }
 
 .comment-new-text:hover {
+    -webkit-box-shadow: 2px 2px 2px 0 #c0c0c0;
     box-shadow: 2px 2px 2px 0 #c0c0c0;
 }
 
@@ -888,6 +906,7 @@ a.btn-card-action:active > span {
 }
 
 .comment-new-text:focus {
+    -webkit-box-shadow: none;
     box-shadow: none;
     border: 2px solid #227ebf;
     cursor: text;
