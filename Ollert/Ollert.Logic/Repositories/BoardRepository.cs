@@ -35,5 +35,21 @@ namespace Ollert.Logic.Repositories
         {
             throw new NotImplementedException();
         }
+
+        public bool RemoveCardList(int boardId, int cardListId)
+        {
+            var board = Get(boardId);
+            var toDelete = board?.CardLists.FirstOrDefault(x => x.Id == cardListId);
+
+            if (board == null || toDelete == null)
+            {
+                return false;
+            }
+
+            board.CardLists.Remove(toDelete);
+            Save(board);
+
+            return true;
+        }
     }
 }

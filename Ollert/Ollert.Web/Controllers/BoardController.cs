@@ -55,5 +55,17 @@ namespace Ollert.Web.Controllers
                 return Json(new { success = false });
             }
         }
+
+        public IActionResult RemoveCardList(int boardId, int cardListId)
+        {
+            if (_boardRepository.RemoveCardList(boardId, cardListId))
+            {
+                return Json(new { success = true });
+            }
+            else
+            {
+                return Json(new { success = false });
+            }
+        }
     }
 }
