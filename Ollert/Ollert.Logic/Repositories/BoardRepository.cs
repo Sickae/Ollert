@@ -2,7 +2,7 @@
 using Ollert.Logic.DTOs;
 using Ollert.Logic.Managers;
 using Ollert.Logic.Repositories.Interfaces;
-using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Ollert.Logic.Repositories
@@ -31,20 +31,28 @@ namespace Ollert.Logic.Repositories
             return base.Save(dto);
         }
 
-        public bool RemoveCardList(int boardId, int cardListId)
+        public int AddNewCardList(int boardId, string cardListName)
         {
-            var board = Get(boardId);
-            var toDelete = board?.CardLists.FirstOrDefault(x => x.Id == cardListId);
-
-            if (board == null || toDelete == null)
+            if (!string.IsNullOrWhiteSpace(cardListName) && cardListName.Length > 0 && cardListName.Length <= 255)
             {
-                return false;
+                var cardList = new CardListDTO
+                {
+                    Name = cardListName,
+                    Cards = new List<CardDTO>()
+                };
+
+                var board = Get(boardId);
+
+                if (board == null)
+                {
+                    return 0;
+                }
+
+                board.CardLists.Add(cardList);
+                return Save(board);
             }
 
-            board.CardLists.Remove(toDelete);
-            Save(board);
-
-            return true;
+            return 0;
         }
     }
 }

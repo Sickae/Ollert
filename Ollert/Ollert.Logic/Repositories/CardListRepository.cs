@@ -2,6 +2,7 @@
 using Ollert.Logic.DTOs;
 using Ollert.Logic.Managers;
 using Ollert.Logic.Repositories.Interfaces;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Ollert.Logic.Repositories
@@ -29,5 +30,35 @@ namespace Ollert.Logic.Repositories
 
             return base.Save(dto);
         }
+
+        public int AddNewCard(int cardListId, string cardName)
+        {
+            if (!string.IsNullOrWhiteSpace(cardName) && cardName.Length > 0 && cardName.Length <= 255)
+            {
+                var card = new CardDTO
+                {
+                    Name = cardName,
+                    Description = "",
+                    Comments = new List<CommentDTO>(),
+                    Labels = new List<LabelDTO>()
+                };
+
+                var cardList = Get(cardListId);
+
+                if (cardList == null)
+                {
+                    return 0;
+                }
+
+                cardList.Cards.Add(card);
+                return Save(cardList);
+
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
     }
 }

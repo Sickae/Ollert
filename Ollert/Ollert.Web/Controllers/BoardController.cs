@@ -1,9 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Ollert.Logic.DTOs;
 using Ollert.Logic.Repositories;
 using Ollert.Web.Models;
-using System.Collections.Generic;
 
 namespace Ollert.Web.Controllers
 {
@@ -31,23 +29,15 @@ namespace Ollert.Web.Controllers
 
         public IActionResult AddNewCardList(int boardId, string cardListName)
         {
-            if (!string.IsNullOrWhiteSpace(cardListName) && cardListName.Length > 0 && cardListName.Length <= 255)
+            var id = _boardRepository.AddNewCardList(boardId, cardListName);
+
+            if (id > 0)
             {
-                var cardList = new CardListDTO
-                {
-                    Name = cardListName,
-                    Cards = new List<CardDTO>()
-                };
-
-                var board = _boardRepository.Get(boardId);
-                board.CardLists.Add(cardList);
-                _boardRepository.Save(board);
-
                 return Json(new
                 {
                     success = true,
-                    id = cardList.Id,
-                    name = cardList.Name
+                    id,
+                    name = cardListName
                 });
             }
             else

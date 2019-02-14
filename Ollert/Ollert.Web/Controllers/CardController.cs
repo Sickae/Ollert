@@ -15,34 +15,18 @@ namespace Ollert.Web.Controllers
 
         public IActionResult Rename(int id, string cardName)
         {
-            if (!string.IsNullOrWhiteSpace(cardName) && cardName.Length > 0 && cardName.Length <= 255)
+            return Json(new
             {
-                var card = _cardRepository.Get(id);
-                card.Name = cardName;
-                _cardRepository.Save(card);
-
-                return Json(new { success = true });
-            }
-            else
-            {
-                return Json(new { success = false });
-            }
+                success = _cardRepository.Rename(id, cardName)
+            });
         }
 
         public IActionResult SetDescription(int id, string description)
         {
-            if (!string.IsNullOrWhiteSpace(description))
+            return Json(new
             {
-                var card = _cardRepository.Get(id);
-                card.Description = description;
-                _cardRepository.Save(card);
-
-                return Json(new { success = true });
-            }
-            else
-            {
-                return Json(new { success = false });
-            }
+                success = _cardRepository.SetDescription(id, description)
+            });
         }
 
         public IActionResult AddNewComment(int id, string author, string text)

@@ -17,24 +17,14 @@ namespace Ollert.Web.Controllers
 
         public IActionResult AddNewCard(int cardListId, string cardName)
         {
-            if (!string.IsNullOrWhiteSpace(cardName) && cardName.Length > 0 && cardName.Length <= 255)
+            var id = _cardListRepository.AddNewCard(cardListId, cardName);
+
+            if (id > 0)
             {
-                var card = new CardDTO
-                {
-                    Name = cardName,
-                    Description = "",
-                    Comments = new List<CommentDTO>(),
-                    Labels = new List<LabelDTO>()
-                };
-
-                var cardList = _cardListRepository.Get(cardListId);
-                cardList.Cards.Add(card);
-                _cardListRepository.Save(cardList);
-
                 return Json(new
                 {
                     success = true,
-                    id = card.Id
+                    id
                 });
             }
             else
@@ -45,13 +35,14 @@ namespace Ollert.Web.Controllers
 
         public IActionResult RemoveCard(int cardListId, int cardId)
         {
-            var cardList = _cardListRepository.Get(cardListId);
-            var card = cardList.Cards.FirstOrDefault(x => x.Id == cardId);
-
-            cardList.Cards.Remove(card);
-            _cardListRepository.Save(cardList);
-
-            return Json(new { success = true });
+            if (_cardListRepository.RemoveCard(cardListId, cardId))
+            {
+                return Json(new { success = true });
+            }
+            else
+            {
+                return Json(new { success = false });
+            }
         }
 
         public IActionResult RemoveAllCards(int id)
@@ -68,23 +59,10 @@ namespace Ollert.Web.Controllers
 
         public IActionResult Rename(int id, string cardListName)
         {
-            if (!string.IsNullOrEmpty(cardListName) && cardListName.Length > 0 && cardListName.Length <= 255)
+            return Json(new
             {
-                var cardList = _cardListRepository.Get(id);
-                cardList.Name = cardListName;
-                _cardListRepository.Save(cardList);
-
-                return Json(new
-                {
-                    success = true,
-                    id = cardList.Id,
-                    name = cardList.Name
-                });
-            }
-            else
-            {
-                return Json(new { success = false });
-            }
+                success = _cardListRepository.Rename(id, cardListName)
+            });
         }
     }
 }
