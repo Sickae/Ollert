@@ -11,7 +11,6 @@ using Ollert.Logic.DTOs.Mappings;
 using Ollert.Logic.Managers;
 using Ollert.Logic.Managers.Interfaces;
 using Ollert.Logic.Repositories;
-using Ollert.Web.Models.Mappings;
 using System.Linq;
 using System.Text;
 
@@ -88,8 +87,6 @@ namespace Ollert
             Mapper.Initialize(cfg =>
             {
                 cfg.AddProfile<AutoMapperBasicProfile>();
-                cfg.AddProfile<AutoMapperLogicProfile>();
-                cfg.AddProfile<AutoMapperWebProfile>();
             });
 
             // TODO lehet nem fontos
