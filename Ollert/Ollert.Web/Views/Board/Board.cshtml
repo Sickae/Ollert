@@ -196,6 +196,7 @@
                     if (data.success) {
                         var newComment = $('.helper-divs > .comment').clone();
 
+                        newComment.attr('data-id', data.id);
                         newComment.find('.comment-author').text(data.name);
                         newComment.find('.comment-date').text(data.date);
                         newComment.find('.comment-text').text(text);
@@ -203,8 +204,24 @@
                         comment.find('.comment-new-text').text('').blur();
                         comment.closest('.card-details-content').find('.card-details-comments').append(newComment);
                     }
-                })
+                });
             }
+        });
+
+        // Kártya nézetben komment törlése
+        $(document).on('click', '.comment-action-delete', function () {
+            var cardId = $(this).closest('.card-details').data('id');
+            var comment = $(this).closest('.comment');
+            var commentId = comment.data('id');
+
+            $.post('@Url.Action(nameof(CardController.RemoveComment), "Card")', {
+                cardId,
+                commentId
+            }).done(function (data) {
+                if (data.success) {
+                    comment.remove();
+                }
+            });
         });
 
         // CardList functions
@@ -438,10 +455,13 @@
                         <div class="cardlist-card-comments" style="display: none">
                             @foreach (var comment in card.Comments.OrderBy(x => x.CreationDate))
                             {
-                                <div class="comment">
+                                <div class="comment" data-id="@comment.Id">
                                     <div class="comment-author user-select-none">@comment.Author</div>
                                     <div class="comment-date muted user-select-none">@comment.CreationDate.ToLocalTime()</div>
                                     <div class="comment-text">@comment.Text</div>
+                                    <div class="comment-actions">
+                                        <a class="comment-action-delete muted">Törlés</a>
+                                    </div>
                                 </div>
                             }
                         </div>
@@ -624,5 +644,8 @@
         <div class="comment-author user-select-none"></div>
         <div class="comment-date muted user-select-none"></div>
         <div class="comment-text user-select-none"></div>
+        <div class="comment-actions">
+            <a class="comment-action-delete muted">Törlés</a>
+        </div>
     </div>
 </div>

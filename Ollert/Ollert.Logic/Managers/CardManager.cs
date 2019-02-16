@@ -2,6 +2,7 @@
 using Ollert.DataAccess.Entitites;
 using Ollert.Logic.DTOs;
 using Ollert.Logic.Managers.Interfaces;
+using System.Linq;
 
 namespace Ollert.Logic.Managers
 {
@@ -52,6 +53,22 @@ namespace Ollert.Logic.Managers
             {
                 return false;
             }
+        }
+
+        public bool RemoveComment(int cardId, int commentId)
+        {
+            var card = Get(cardId);
+            var toDelete = card?.Comments.FirstOrDefault(x => x.Id == commentId);
+
+            if (card == null || toDelete == null)
+            {
+                return false;
+            }
+
+            card.Comments.Remove(toDelete);
+            Save(card);
+
+            return true;
         }
     }
 }

@@ -915,3 +915,18 @@ a.btn-card-action:active > span {
 .comment-new-text:focus::before {
     color: #7a848d !important;
 }
+
+.comment-actions {
+    font-size: 12px;
+    margin-top: 10px;
+    margin-left: 2px;
+}
+
+.comment-actions > a {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.comment-actions > a:hover {
+    color: #17394d !important;
+}
