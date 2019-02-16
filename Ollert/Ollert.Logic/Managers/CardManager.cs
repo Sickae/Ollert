@@ -35,7 +35,7 @@ namespace Ollert.Logic.Managers
 
         public bool SetDescription(int id, string description)
         {
-            if (!string.IsNullOrWhiteSpace(description))
+            if (string.IsNullOrWhiteSpace(description))
             {
                 description = "";
             }
