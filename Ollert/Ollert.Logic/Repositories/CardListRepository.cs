@@ -51,8 +51,8 @@ namespace Ollert.Logic.Repositories
                 }
 
                 cardList.Cards.Add(card);
-                return Save(cardList);
-
+                Save(cardList);
+                return card.Id;
             }
             else
             {
