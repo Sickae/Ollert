@@ -136,25 +136,26 @@
             var cardId = $(this).closest('.card-details').data('id');
             var cardDesc = $(this).text();
 
-            if (cardDesc.length > 0) {
-                $.post('@Url.Action(nameof(CardController.SetDescription), "Card")', {
-                    id: cardId,
-                    description: cardDesc
-                }).done(function (data) {
-                    if (data.success) {
-                        $('.cardlist-card[data-id=' + cardId + ']').find('#card_Description').val(cardDesc);
-                    }
-                });
-            } else {
-                var originalDesc = $('.cardlist-card[data-id=' + cardId + ']').find('#card_Description').val();
-                $(this).text(originalDesc);
-            }
+            $.post('@Url.Action(nameof(CardController.SetDescription), "Card")', {
+                id: cardId,
+                description: cardDesc
+            }).done(function (data) {
+                if (data.success) {
+                    $('.cardlist-card[data-id=' + cardId + ']').find('#card_Description').val(cardDesc);
+                }
+            });
         });
 
         // Kártya nézetben leírás mező szerkesztésnél Esc gomb működése
         $(document).on('keydown', '.card-details-description-text', function (event) {
-            if (event.keyCode === 27) {
-                $(this).text('').blur();
+            if (event.keyCode === 13 && event.ctrlKey) {
+                event.preventDefault();
+                $(this).blur();
+            }
+            else if (event.keyCode === 27) {
+                var cardId = $(this).closest('.card-details').data('id');
+                var originalDesc = $('.cardlist-card[data-id=' + cardId + ']').find('#card_Description').val();
+                $(this).text(originalDesc).blur();
             }
         });
 
@@ -165,7 +166,11 @@
 
         // Kártya nézetben új komment mezőben Esc gomb működése
         $(document).on('keydown', '.comment-new-text', function (event) {
-            if (event.keyCode === 27) {
+            if (event.keyCode === 13 && event.ctrlKey) {
+                event.preventDefault();
+                $(this).siblings('.btn-save').click();
+            }
+            else if (event.keyCode === 27) {
                 $(this).text('').blur();
             }
         });
