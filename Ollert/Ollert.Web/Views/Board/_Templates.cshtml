@@ -1,0 +1,136 @@
+﻿<div class="templates">
+    @* Kártya létrehozás *@
+    <div class="empty-card-input">
+        <div class="cardlist-card">
+            <div class="cardlist-card-name-input user-select-text" contenteditable="true" placeholder="Kártya neve..." spellcheck="false"></div>
+        </div>
+        <div class="empty-card-input-control">
+            <a class="btn btn-save" onclick="addNewCard(this)">Mentés</a>
+            <div class="cardlist-icon-cancel" onclick="toggleNewCardWindow()">
+                <span class="fas fa-times"></span>
+            </div>
+        </div>
+    </div>
+
+    @* Kártya szerkesztés *@
+    <div class="edit-card-input">
+        <div class="cardlist-card">
+            <div class="cardlist-card-name-input user-select-text" contenteditable="true" placeholder="Kártya neve..." spellcheck="false"></div>
+        </div>
+        <div class="edit-card-input-control">
+            <a class="btn btn-save">Mentés</a>
+            <div class="cardlist-icon-cancel muted" onclick="toggleEditCardWindow(this)">
+                <span class="fas fa-times"></span>
+            </div>
+            <div class="cardlist-icon-delete">
+                <span class="fas fa-trash"></span>
+            </div>
+        </div>
+    </div>
+
+    @* Kártya mock *@
+    <div class="empty-card">
+        <div class="cardlist-card">
+            <div class="cardlist-card-icon cardlist-card-icon-edit">
+                <a onclick="toggleEditCardWindow(this)">
+                    <span class="fas fa-pencil-alt"></span>
+                </a>
+            </div>
+            <div class="cardlist-card-content">
+                <div class="cardlist-card-name"></div>
+            </div>
+        </div>
+    </div>
+
+    @* Lista mock *@
+    <div class="empty-cardlist">
+        <div class="cardlist-container">
+            <div class="cardlist-header">
+                <input class="cardlist-title" maxlength="255" />
+                <div class="cardlist-header-menu">
+                    <div class="dropdown">
+                        <a class="cardlist-header-menu-link muted dropdown-toggle" data-toggle="dropdown">
+                            <span class="fas fa-ellipsis-h"></span>
+                        </a>
+                        <div class="dropdown-menu">
+                            <div class="dropdown-header user-select-none">Lista Műveletek</div>
+                            <div class="dropdown-divider"></div>
+                            <button class="dropdown-item" onclick="clearAllCards(this)">Kártyák ürítése</button>
+                            <button class="dropdown-item" onclick="deleteCardList(this)">Törlés</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="cardlist-content"></div>
+            <div class="cardlist-card-new" onclick="toggleNewCardWindow(this)">
+                <span class="fas fa-plus"></span>
+                Új kártya hozzáadása
+            </div>
+        </div>
+    </div>
+
+    @* Kártya nézet mock *@
+    <div class="card-details">
+        <div class="card-details-header">
+            <div class="card-details-icon">
+                <span class="fas fa-clipboard icon-large"></span>
+            </div>
+            <div class="card-details-title user-select-text" contenteditable="true" placeholder="Kártya neve..." spellcheck="false"></div>
+            <div class="card-details-icon icon-large card-details-close">
+                <span class="fas fa-times"></span>
+            </div>
+        </div>
+        <div class="card-details-body">
+            <div class="card-details-side-menu">
+                <div class="card-details-side-menu-section muted user-select-none">Műveletek</div>
+                <a href="#" class="btn btn-card-action">
+                    <span class="fas fa-arrow-right"></span>
+                    Mozgatás
+                </a>
+                <a href="#" class="btn btn-card-action">
+                    <span class="fas fa-trash"></span>
+                    Törlés
+                </a>
+            </div>
+            <div class="card-details-content">
+                <div class="card-details-group">
+                    <div class="card-details-icon">
+                        <span class="fas fa-bars icon-large"></span>
+                    </div>
+                    <div class="card-details-label user-select-none">Leírás</div>
+                </div>
+                <div class="card-details-description-text" contenteditable="true" placeholder="Leírás hozzáadása..." spellcheck="false"></div>
+
+                <div class="card-details-group">
+                    <div class="card-details-icon">
+                        <span class="fas fa-comments icon-large"></span>
+                    </div>
+                    <div class="card-details-label user-select-none">Kommentek</div>
+                </div>
+                <div class="card-details-comments"></div>
+
+                <div class="card-details-group">
+                    <div class="card-details-icon">
+                        <span class="fas fa-comment-dots icon-large"></span>
+                    </div>
+                    <div class="card-details-label user-select-none">Új komment</div>
+                </div>
+                <div class="comment-new">
+                    <input class="comment-new-author" maxlength="255" placeholder="Név" />
+                    <div class="comment-new-text" contenteditable="true" placeholder="Új komment hozzáadása..." spellcheck="true"></div>
+                    <a class="btn btn-save disabled">Mentés</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* Komment mock *@
+    <div class="comment">
+        <div class="comment-author user-select-none"></div>
+        <div class="comment-date muted user-select-none"></div>
+        <div class="comment-text user-select-none"></div>
+        <div class="comment-actions">
+            <a class="comment-action-delete muted">Törlés</a>
+        </div>
+    </div>
+</div>
