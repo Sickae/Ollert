@@ -466,6 +466,7 @@ input::placeholder {
 }
 
 .cardlist-card-icon {
+    display: inline-block;
     font-size: 11px;
 }
 

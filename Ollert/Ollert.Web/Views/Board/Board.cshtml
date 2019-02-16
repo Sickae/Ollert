@@ -478,6 +478,10 @@
                                 </div>
                             }
                             <div class="cardlist-card-name">@card.Name</div>
+                            @{ var displayDesc = card.Description.Length > 0 ? "initial" : "none"; }
+                            <div class="cardlist-card-icon cardlist-card-icon-description" style="display: @displayDesc">
+                                <span class="fas fa-align-justify muted"></span>
+                            </div>
                             @if (card.Comments.Any())
                             {
                                 <div class="cardlist-card-icon cardlist-card-icon-comment">
