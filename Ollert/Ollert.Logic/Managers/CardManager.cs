@@ -37,22 +37,19 @@ namespace Ollert.Logic.Managers
         {
             if (!string.IsNullOrWhiteSpace(description))
             {
-                var card = Get(id);
-
-                if (card == null)
-                {
-                    return false;
-                }
-
-                card.Description = description;
-                Save(card);
-
-                return true;
+                description = "";
             }
-            else
+            var card = Get(id);
+
+            if (card == null)
             {
                 return false;
             }
+
+            card.Description = description;
+            Save(card);
+
+            return true;
         }
 
         public bool RemoveComment(int cardId, int commentId)
