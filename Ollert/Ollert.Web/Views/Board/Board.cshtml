@@ -196,7 +196,7 @@
                     if (data.success) {
                         var newComment = $('.helper-divs > .comment').clone();
 
-                        newComment.find('.comment-author').text(author);
+                        newComment.find('.comment-author').text(data.name);
                         newComment.find('.comment-date').text(data.date);
                         newComment.find('.comment-text').text(text);
 

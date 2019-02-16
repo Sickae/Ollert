@@ -34,11 +34,14 @@ namespace Ollert.Web.Controllers
             if (!string.IsNullOrWhiteSpace(text) && text.Length > 0)
             {
                 var commentId = _cardRepository.AddNewComment(id, author, text);
-                var date = _cardRepository.Get(id).Comments.FirstOrDefault(x => x.Id == commentId).CreationDate.ToLocalTime().ToString();
+                var newComment = _cardRepository.Get(id).Comments.FirstOrDefault(x => x.Id == commentId);
+                var date = newComment.CreationDate.ToLocalTime().ToString();
+                var authorName = newComment.Author;
                 return Json(new
                 {
                     success = true,
-                    date
+                    date,
+                    name = authorName
                 });
             }
             else
