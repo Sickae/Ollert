@@ -141,7 +141,10 @@
                 description: cardDesc
             }).done(function (data) {
                 if (data.success) {
-                    $('.cardlist-card[data-id=' + cardId + ']').find('#card_Description').val(cardDesc);
+                    var card = $('.cardlist-card[data-id=' + cardId + ']');
+                    
+                    card.find('#card_Description').val(cardDesc);
+                    card.find('.cardlist-card-icon-description').toggle(cardDesc.length > 0);
                 }
             });
         });
@@ -195,6 +198,7 @@
                 }).done(function (data) {
                     if (data.success) {
                         var newComment = $('.helper-divs > .comment').clone();
+                        var card = $('.cardlist-card[data-id=' + cardId + ']');
 
                         newComment.attr('data-id', data.id);
                         newComment.find('.comment-author').text(data.name);
@@ -203,6 +207,13 @@
 
                         comment.find('.comment-new-text').text('').blur();
                         comment.closest('.card-details-content').find('.card-details-comments').append(newComment);
+
+                        card.find('.cardlist-card-comments').append(newComment.clone());
+
+                        var commentsIcon = card.find('.cardlist-card-icon-comment');
+                        var commentCount = card.find('.cardlist-card-comments').find('.comment').length;
+                        commentsIcon.toggle(commentCount > 0);
+                        commentsIcon.find('.comment-count').text(commentCount);
                     }
                 });
             }
@@ -220,6 +231,13 @@
             }).done(function (data) {
                 if (data.success) {
                     comment.remove();
+                    $('.comment[data-id=' + commentId + ']').remove();
+
+                    var card = $('.cardlist-card[data-id=' + cardId + ']');
+                    var commentsIcon = card.find('.cardlist-card-icon-comment');
+                    var commentCount = card.find('.cardlist-card-comments').find('.comment').length;
+                    commentsIcon.toggle(commentCount > 0);
+                    commentsIcon.find('.comment-count').text(commentCount);
                 }
             });
         });
@@ -478,17 +496,15 @@
                                 </div>
                             }
                             <div class="cardlist-card-name">@card.Name</div>
-                            @{ var displayDesc = card.Description.Length > 0 ? "initial" : "none"; }
+                            @{ var displayDesc = card.Description?.Length > 0 ? "initial" : "none"; }
                             <div class="cardlist-card-icon cardlist-card-icon-description" style="display: @displayDesc">
                                 <span class="fas fa-align-justify muted"></span>
                             </div>
-                            @if (card.Comments.Any())
-                            {
-                                <div class="cardlist-card-icon cardlist-card-icon-comment">
-                                    <span class="fas fa-comment muted"></span>
-                                    @card.Comments.Count
-                                </div>
-                            }
+                            @{ var displayComment = card.Comments.Any() ? "initial" : "none"; }
+                            <div class="cardlist-card-icon cardlist-card-icon-comment" style="display: @displayComment">
+                                <span class="fas fa-comment muted"></span>
+                                <span class="comment-count">@card.Comments.Count</span>
+                            </div>
                         </div>
                     </div>
                 }
