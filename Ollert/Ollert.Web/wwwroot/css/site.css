@@ -223,6 +223,23 @@ input::placeholder {
     color: #17394d !important;
 }
 
+.category-new-input-container {
+    width: 250px;
+    display: none;
+}
+
+.category-new-input {
+    width: 100%;
+    height: 30px;
+    border: 2px solid #227ebf;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    color: #17394d;
+    font-weight: 700;
+    background-color: #fff;
+    padding: 0 5px;
+}
+
 .category-name {
     background-color: inherit;
     border: 2px solid transparent;

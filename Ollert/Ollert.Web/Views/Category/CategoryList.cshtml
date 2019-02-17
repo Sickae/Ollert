@@ -39,9 +39,24 @@
             </ul>
         }
 
-        <a class="category category-new muted user-select-none">
-            <span class="fas fa-plus"></span>
-            Új kategória hozzáadása
-        </a>
+
+        <div class="category category-new-container muted user-select-none">
+            <div class="category-new-input-container">
+                <input class="category-new-input" placeholder="Kategória neve..." maxlength="255" />
+                <div class="category-new-control">
+                    <a class="btn btn-save" onclick="addNewCategory()">Mentés</a>
+                    <div class="cardlist-icon-cancel muted" onclick="toggleNewCategoryWindow()">
+                        <span class="fas fa-times"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="category-new" onclick="toggleNewCategoryWindow()">
+                <span class="fas fa-plus"></span>
+                Új kategória hozzáadása
+            </div>
+        </div>
     </div>
 </div>
+
+<partial name="_Templates" />
