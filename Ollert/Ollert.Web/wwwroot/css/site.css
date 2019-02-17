@@ -178,19 +178,13 @@ input::placeholder {
 /* BoardList stylings */
 
 .board-list-container {
-    min-width: 100%;
-    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     margin-top: 4%;
-    margin-left: auto;
-    margin-right: auto;
 }
 
 .board-list {
-    position: relative;
-    margin-left: auto;
-    margin-right: auto;
-    width: 45%;
-    font-size: 16px;
     color: #17394d;
 }
 
@@ -199,33 +193,57 @@ input::placeholder {
     flex-wrap: wrap;
     list-style: none;
     padding: 0;
+    margin-bottom: 20px;
 }
 
 .board-list li {
     display: flex;
-    flex: 1 1 25%;
+    flex: 1 1 10em;
     margin: 10px;
-    max-width: 30%;
+    max-width: 10em;
 }
 
 .category {
-    margin-left: 30px;
+    margin-left: 15px;
+    font-size: 16px;
+    font-weight: 700;
 }
 
 .category > span {
-    font-size: 18px;
-    margin-right: 10px;
+    font-size: 16px;
+    margin-right: 5px;
+}
+
+.category-new {
+    text-decoration: none !important;
+    cursor: pointer;
+}
+
+.category-new:hover {
+    color: #17394d !important;
+}
+
+.category-name {
+    background-color: inherit;
+    border: 2px solid transparent;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 5px;
+}
+
+.category-name:focus {
+    border: 2px solid #227ebf;
 }
 
 .board-list-item {
     display: table-caption;
-    height: 100px;
+    height: 6em;
     width: 100%;
     background-color: #256491;
     border-radius: 10px;
     cursor: pointer;
-    transition-property: background-color;
-    transition-duration: .5s;
+    -webkit-box-shadow: 2px 2px 2px 0 #d0d0d0;
+    box-shadow: 2px 2px 2px 0 #d0d0d0;
 }
 
 .board-list-item-new {
@@ -238,6 +256,8 @@ input::placeholder {
 
 .board-list-item:hover {
     background-color: #4c89b5;
+    -webkit-box-shadow: 2px 2px 2px 0 #c0c0c0;
+    box-shadow: 2px 2px 2px 0 #c0c0c0;
 }
 
 .board-list-item-new:hover {
@@ -257,23 +277,16 @@ input::placeholder {
 }
 
 .board-title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     height: 100%;
-    margin-top: auto;
-    margin-bottom: auto;
     text-align: center;
-    vertical-align: middle;
-    line-height: 100px;
     color: #fff;
     font-weight: 700;
-    font-size: 14px;
-    word-wrap: break-word;
-    font-size: 16px;
 }
 
 .board-new {
-    transition-property: color;
-    transition-duration: .5s;
-    font-size: 16px !important;
     color: #677d89;
 }
 

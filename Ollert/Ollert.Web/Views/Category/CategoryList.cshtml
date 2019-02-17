@@ -2,35 +2,23 @@
 
 @section Scripts {
 
-    <script type="text/javascript">
-
-        $(document).on('click', '.category-new', function () {
-            $.post('@Url.Action(nameof(CategoryController.AddNewCategory), "Category")', {
-                categoryName: 'TEST_CATEGORY'
-            }).done(function (data) {
-                if (data.success) {
-                    console.log(data.category);
-                }
-            });
-        }); 
-
-    </script>
+    <script type="text/javascript" src="~/js/categoryFunctions.js"></script>
 
 }
 
 <div class="row board-list-container">
-    @foreach (var category in Model.Categories.OrderBy(x => x.ModificationDate))
-    {
-        <div class="board-list">
-            <div class="category">
-                <span class="fas fa-hashtag"></span>
-                @category.Name
+    <div class="board-list">
+        @foreach (var category in Model.Categories.OrderBy(x => x.ModificationDate))
+        {
+            <div class="category user-select-none">
+                <span class="fas fa-folder"></span>
+                <input class="category-name" value="@category.Name" />
             </div>
             <ul>
                 @foreach (var board in category.Boards)
                 {
                     <li>
-                        <div class="board-list-item">
+                        <div class="board-list-item user-select-none">
                             <a href="@Url.Action(nameof(BoardController.Board), "Board", new { id = board.Id })">
                                 <div class="board-title">
                                     @board.Name
@@ -40,20 +28,20 @@
                     </li>
                 }
                 <li>
-                    <div class="board-list-item board-list-item-new">
+                    <div class="board-list-item board-list-item-new user-select-none">
                         <a href="@Url.Action(nameof(BoardController.New), "Board")">
                             <div class="board-title board-new">
-                                Új tábla létrehozása...
+                                Új tábla
                             </div>
                         </a>
                     </div>
                 </li>
             </ul>
-        </div>
-    }
+        }
 
-    <a class="category-new">
-        <span class="fas fa-times"></span>
-        Új kategória hozzáadása
-    </a>
+        <a class="category category-new muted user-select-none">
+            <span class="fas fa-plus"></span>
+            Új kategória hozzáadása
+        </a>
+    </div>
 </div>

@@ -112,7 +112,7 @@ function addNewCard(caller) {
             emptyCard.find('.cardlist-card-name').text(cardName);
             emptyCard.append(cardDesc);
             listContainer.find('.cardlist-content').append(emptyCard);
-            toggleNewCardWindow();
+            toggleNewCardWindow() 
             emptyCard.show();
         }
     });
