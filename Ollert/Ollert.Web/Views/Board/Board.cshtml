@@ -11,12 +11,18 @@
 
         $(document).ready(function () {
             $('.nav-title').remove();
+
+            @if (Model.Id == 0)
+            {
+                @: $('.nav-board-title').focus();
+            }
         });
 
     </script>
 }
 
 @Html.HiddenFor(x => x.Id)
+@Html.HiddenFor(x => x.Category.Id)
 
 <input class="nav-board-title" value="@Model.Name" data-name="@Model.Name" placeholder="Tábla neve..." />
 

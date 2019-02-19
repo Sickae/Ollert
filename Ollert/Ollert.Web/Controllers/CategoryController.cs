@@ -54,5 +54,26 @@ namespace Ollert.Web.Controllers
                 success = _categoryRepository.Rename(id, name)
             });
         }
+
+        public IActionResult AddNewBoard(int categoryId, string name)
+        {
+            var id = _categoryRepository.AddNewBoard(categoryId, name);
+
+            if (id > 0)
+            {
+                return Json(new
+                {
+                    success = true,
+                    redirectUrl = Url.Action(nameof(BoardController.Board), "Board", new { id })
+                });
+            }
+            else
+            {
+                return Json(new
+                {
+                    success = false
+                });
+            }
+        }
     }
 }

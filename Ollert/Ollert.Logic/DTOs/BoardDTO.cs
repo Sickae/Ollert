@@ -7,5 +7,7 @@ namespace Ollert.Logic.DTOs
         public string Name { get; set; }
 
         public IList<CardListDTO> CardLists { get; set; }
+
+        public CategoryDTO Category { get; set; }
     }
 }

@@ -33,7 +33,7 @@
                     }
                     <li>
                         <div class="board-list-item board-list-item-new user-select-none">
-                            <a href="@Url.Action(nameof(BoardController.New), "Board")">
+                            <a href="@Url.Action(nameof(BoardController.New), "Board", new { categoryId = category.Id })">
                                 <div class="board-title board-new">
                                     Új tábla
                                 </div>

@@ -7,5 +7,7 @@ namespace Ollert.DataAccess.Entitites
         public virtual string Name { get; set; }
 
         public virtual IEnumerable<CardList> CardLists { get; set; }
+
+        public virtual Category Category { get; set; }
     }
 }
