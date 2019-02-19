@@ -1,4 +1,5 @@
-﻿using NHibernate;
+﻿using AutoMapper;
+using NHibernate;
 using Ollert.DataAccess.Entitites;
 using Ollert.Logic.DTOs;
 using Ollert.Logic.Managers.Interfaces;
@@ -10,6 +11,12 @@ namespace Ollert.Logic.Managers
     {
         public CategoryManager(ISession session) : base(session)
         { }
+
+        public override IList<CategoryDTO> GetAll()
+        {
+            var entities = _session.QueryOver<Category>().Where(x => !x.IsDeleted).List();
+            return Mapper.Map<IList<Category>, IList<CategoryDTO>>(entities);
+        }
 
         public int AddNewCategory(string categoryName)
         {
@@ -27,6 +34,21 @@ namespace Ollert.Logic.Managers
             {
                 return 0;
             }
+        }
+
+        public bool RemoveCategory(int id)
+        {
+            var category = GetEntity(id);
+
+            if (category == null)
+            {
+                return false;
+            }
+
+            category.IsDeleted = true;
+            Save(category);
+
+            return true;
         }
     }
 }

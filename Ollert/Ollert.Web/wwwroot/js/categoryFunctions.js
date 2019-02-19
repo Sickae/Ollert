@@ -11,6 +11,20 @@ $(document).on('keyup', '.category-new-input', function (event) {
         toggleNewCategoryWindow();
     }
 });
+
+// Kategória törlése ikonra kattintva
+$(document).on('click', '.category-icon-delete', function () {
+    var categoryContainer = $(this).closest('.category-container');
+    var categoryId = categoryContainer.find('.category').data('id');
+
+    $.post('../../Category/RemoveCategory', {
+        id: categoryId
+    }).done(function (data) {
+        if (data.success) {
+            categoryContainer.remove();
+        }
+    });
+});
  
 /* ###############
    ## Functions ##
@@ -37,16 +51,14 @@ function addNewCategory() {
         categoryName: name
     }).done(function (data) {
         if (data.success) {
-            var emptyCategory = $('.templates > .empty-category > .category').clone();
-            var newBoard = $('.templates > .empty-category > ul').clone();
+            var emptyCategoryContainer = $('.templates > .empty-category > .category-container').clone();
 
             categoryNewContainer.find('.category-new').show();
             categoryNewContainer.find('.category-new-input-container').hide();
-            emptyCategory.find('.category-name').val(name);
-            emptyCategory.attr('data-id', data.id);
-            emptyCategory.find('.category-name').attr('data-name', name);
+            emptyCategoryContainer.find('.category').attr('data-id', data.id);
+            emptyCategoryContainer.find('.category-name').val(name).attr('data-name', name);
 
-            $('.board-list').append(emptyCategory).append(newBoard).append(categoryNewContainer);
+            $('.board-list').append(emptyCategoryContainer).append(categoryNewContainer);
         }
     });
 }

@@ -10,33 +10,38 @@
     <div class="board-list">
         @foreach (var category in Model.Categories.OrderBy(x => x.ModificationDate))
         {
-            <div class="category user-select-none">
-                <span class="fas fa-folder"></span>
-                <input class="category-name" value="@category.Name" />
-            </div>
-            <ul>
-                @foreach (var board in category.Boards)
-                {
+            <div class="category-container">
+                <div class="category user-select-none" data-id="@category.Id">
+                    <span class="fas fa-folder"></span>
+                    <input class="category-name" value="@category.Name" />
+                    <div class="category-icon-delete">
+                        <span class="fas fa-trash"></span>
+                    </div>
+                </div>
+                <ul>
+                    @foreach (var board in category.Boards)
+                    {
+                        <li>
+                            <div class="board-list-item user-select-none">
+                                <a href="@Url.Action(nameof(BoardController.Board), "Board", new { id = board.Id })">
+                                    <div class="board-title">
+                                        @board.Name
+                                    </div>
+                                </a>
+                            </div>
+                        </li>
+                    }
                     <li>
-                        <div class="board-list-item user-select-none">
-                            <a href="@Url.Action(nameof(BoardController.Board), "Board", new { id = board.Id })">
-                                <div class="board-title">
-                                    @board.Name
+                        <div class="board-list-item board-list-item-new user-select-none">
+                            <a href="@Url.Action(nameof(BoardController.New), "Board")">
+                                <div class="board-title board-new">
+                                    Új tábla
                                 </div>
                             </a>
                         </div>
                     </li>
-                }
-                <li>
-                    <div class="board-list-item board-list-item-new user-select-none">
-                        <a href="@Url.Action(nameof(BoardController.New), "Board")">
-                            <div class="board-title board-new">
-                                Új tábla
-                            </div>
-                        </a>
-                    </div>
-                </li>
-            </ul>
+                </ul>
+            </div>
         }
 
 

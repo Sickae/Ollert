@@ -188,7 +188,7 @@ input::placeholder {
     color: #17394d;
 }
 
-.board-list > ul {
+.board-list ul {
     display: flex;
     flex-wrap: wrap;
     list-style: none;
@@ -250,6 +250,29 @@ input::placeholder {
 
 .category-name:focus {
     border: 2px solid #227ebf;
+}
+
+.category-icon-delete {
+    display: inline-block;
+    color: #cc9393;
+    margin-left: 20px;
+    height: 32px;
+    width: 32px;
+    line-height: 32px;
+    vertical-align: middle;
+    text-align: center;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.category-icon-delete:hover {
+    color: #c25555;
+    background-color: #e0e0e0;
+}
+
+.category-icon-delete:active {
+    color: #c25555;
+    background-color: #d0d0d0;
 }
 
 .board-list-item {

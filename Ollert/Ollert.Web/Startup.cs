@@ -86,7 +86,7 @@ namespace Ollert
         {
             Mapper.Initialize(cfg =>
             {
-                cfg.AddProfile<AutoMapperBasicProfile>();
+                cfg.AddProfile<AutoMapperLogicProfile>();
             });
 
             // TODO lehet nem fontos

@@ -7,5 +7,7 @@ namespace Ollert.DataAccess.Entitites
         public virtual string Name { get; set; }
 
         public virtual IEnumerable<Board> Boards { get; set; }
+
+        public virtual bool IsDeleted { get; set; }
     }
 }

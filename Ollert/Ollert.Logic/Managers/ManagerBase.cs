@@ -23,7 +23,12 @@ namespace Ollert.Logic.Managers
             return Mapper.Map<TEntity, TDto>(_session.Get<TEntity>(id));
         }
 
-        public IList<TDto> GetAll()
+        protected TEntity GetEntity(int id)
+        {
+            return _session.Get<TEntity>(id);
+        }
+
+        public virtual IList<TDto> GetAll()
         {
             var entities = _session.QueryOver<TEntity>().List();
             var dtos = Mapper.Map<IList<TEntity>, IList<TDto>>(entities);
