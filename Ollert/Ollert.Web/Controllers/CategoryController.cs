@@ -46,5 +46,13 @@ namespace Ollert.Web.Controllers
                 success = _categoryRepository.RemoveCategory(id)
             });
         }
+
+        public IActionResult Rename(int id, string name)
+        {
+            return Json(new
+            {
+                success = _categoryRepository.Rename(id, name)
+            });
+        }
     }
 }

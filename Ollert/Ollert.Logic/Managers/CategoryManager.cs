@@ -50,5 +50,26 @@ namespace Ollert.Logic.Managers
 
             return true;
         }
+
+        public bool Rename(int id, string name)
+        {
+            if (!string.IsNullOrWhiteSpace(name) && name.Length > 0 && name.Length <= 255)
+            {
+                var category = Get(id);
+
+                if (category == null)
+                {
+                    return false;
+                }
+
+                category.Name = name;
+                Save(category);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }

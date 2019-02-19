@@ -25,6 +25,36 @@ $(document).on('click', '.category-icon-delete', function () {
         }
     });
 });
+
+// Kategória átnevezése név mező fókusz vesztésekor
+$(document).on('blur', '.category-name', function () {
+    var name = $(this).val();
+
+    if (name.length === 0) {
+        $(this).val($(this).data('name'));
+    } else {
+        var id = $(this).closest('.category').data('id');
+
+        $.post('../../Category/Rename', {
+            id,
+            name
+        }).done(function (data) {
+            if (data.success) {
+                $(this).attr('data-name', name);
+            }
+        });
+    }
+});
+
+// Kategória név mezőnél Enter és Esc gombok működése 
+$(document).on('keydown', '.category-name', function (event) {
+    if (event.keyCode === 13) {
+        $(this).blur();
+    } else if (event.keyCode === 27) {
+        $(this).val('');
+        $(this).blur();
+    }
+});
  
 /* ###############
    ## Functions ##
