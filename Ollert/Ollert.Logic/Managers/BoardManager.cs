@@ -26,5 +26,27 @@ namespace Ollert.Logic.Managers
 
             return true;
         }
+
+        public bool Rename(int id, string name)
+        {
+            if (!string.IsNullOrWhiteSpace(name) && name.Length > 0 && name.Length <= 255)
+            {
+                var board = Get(id);
+
+                if (board == null)
+                {
+                    return false;
+                }
+
+                board.Name = name;
+                Save(board);
+
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }

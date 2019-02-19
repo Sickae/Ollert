@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Ollert.Logic.DTOs;
 using Ollert.Logic.Repositories;
 using Ollert.Web.Models;
 
@@ -21,7 +22,7 @@ namespace Ollert.Web.Controllers
 
         public IActionResult Board(int id)
         {
-            var board = _boardRepository.Get(id);
+            var board = _boardRepository.Get(id) ?? new BoardDTO();
             var vm = Mapper.Map<BoardViewModel>(board);
             SetTitle(board.Name);
             return View(nameof(Board), vm);
@@ -56,6 +57,14 @@ namespace Ollert.Web.Controllers
             {
                 return Json(new { success = false });
             }
+        }
+
+        public IActionResult Rename(int id, string name)
+        {
+            return Json(new
+            {
+                success = _boardRepository.Rename(id, name)
+            });
         }
     }
 }

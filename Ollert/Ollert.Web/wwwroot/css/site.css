@@ -79,14 +79,19 @@ html {
 
 .nav-title {
     position: absolute;
-    width: 100%;
+    width: 20%;
     height: 40px;
+    line-height: 40px;
     text-align: center;
     vertical-align: middle;
     color: #fff;
     font-weight: 700;
     font-size: 18px;
-    line-height: 40px;
+    left: 50%;
+    transform: translate(-50%, 0);
+    text-overflow: ellipsis;
+    background-color: inherit;
+    border: none;
 }
 
 /* General */
@@ -324,6 +329,35 @@ input::placeholder {
     text-align: center;
     color: #fff;
     font-weight: 700;
+}
+
+
+.nav-board-title {
+    position: absolute;
+    width: 20%;
+    height: 40px;
+    text-align: center;
+    vertical-align: middle;
+    color: #fff;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 40px;
+    left: 50%;
+    top: 0;
+    transform: translate(-50%, 0);
+    border: 2px solid transparent;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: inherit;
+    text-overflow: ellipsis;
+    z-index: 1050;
+}
+
+.nav-board-title:focus {
+    color: #17394d;
+    background-color: #fff;
+    border: 2px solid #59aae5;
+    cursor: text;
 }
 
 .board-new {
