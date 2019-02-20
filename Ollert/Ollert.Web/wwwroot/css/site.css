@@ -94,6 +94,35 @@ html {
     border: none;
 }
 
+@media screen and (max-width: 767px){
+    .navbar-collapse {
+        display: block !important;
+        border: none;
+        margin-top: -7.5px;
+    }
+
+    .navbar-nav > li, .navbar-nav {
+        float: left !important;
+    }
+
+    .navbar-right {
+        float: right !important;
+        margin-right: -30px;
+    }
+
+    .nav-title{
+        margin-top: 7.5px;
+    }
+}
+
+@media screen and (max-width: 360px){
+    .nav-title{
+        display: none;
+    }
+}
+
+
+
 /* General */
 
 .templates {
