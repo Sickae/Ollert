@@ -27,7 +27,7 @@
 <input class="nav-board-title" value="@Model.Name" data-name="@Model.Name" placeholder="Tábla neve..." />
 
 <div class="row cardlist-list">
-    @foreach (var cardList in Model.CardLists)
+    @foreach (var cardList in Model.CardLists.OrderBy(x => x.Id))
     {
         <div class="cardlist-container" data-id="@cardList.Id">
             <div class="cardlist-header">
@@ -47,7 +47,7 @@
                 </div>
             </div>
             <div class="cardlist-content">
-                @foreach (var card in cardList.Cards)
+                @foreach (var card in cardList.Cards.OrderBy(x => x.Id))
                 {
                     <div class="cardlist-card" data-id="@card.Id">
                         @Html.HiddenFor(x => card.Description)

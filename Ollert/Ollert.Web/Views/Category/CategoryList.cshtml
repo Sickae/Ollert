@@ -9,7 +9,7 @@
 
 <div class="row board-list-container">
     <div class="board-list">
-        @foreach (var category in Model.Categories.OrderBy(x => x.ModificationDate))
+        @foreach (var category in Model.Categories.OrderBy(x => x.Id))
         {
             <div class="category-container">
                 <div class="category user-select-none" data-id="@category.Id">
