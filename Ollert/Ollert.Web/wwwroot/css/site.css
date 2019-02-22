@@ -1094,3 +1094,19 @@ a.btn-card-action:active > span {
 .comment-actions > a:hover {
     color: #17394d !important;
 }
+
+/* Error stylings */
+
+.error-container {
+    text-align: center;
+}
+
+.error-code {
+    color: #c44;
+    font-size: 120px;
+    font-weight: 600;
+}
+
+.error-message {
+    color: #17394d;
+}

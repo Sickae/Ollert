@@ -28,7 +28,13 @@ namespace Ollert.Web.Controllers
 
         public IActionResult Board(int id)
         {
-            var board = _boardRepository.Get(id) ?? new BoardDTO();
+            var board = _boardRepository.Get(id);
+
+            if (board == null)
+            {
+                return NotFound();
+            }
+
             var vm = Mapper.Map<BoardViewModel>(board);
             return Board(vm);
         }

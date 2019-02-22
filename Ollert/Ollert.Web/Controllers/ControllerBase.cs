@@ -24,5 +24,10 @@ namespace Ollert.Web.Controllers
         {
             ViewBag.Categories = _categoryManager.GetAll();
         }
+
+        //protected IActionResult NotFound()
+        //{
+        //    return RedirectToAction(nameof(HomeController.Error), "Home", new { StatusCode = 404 });
+        //}
     }
 }
