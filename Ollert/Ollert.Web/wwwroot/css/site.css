@@ -335,7 +335,7 @@ a.dropdown-item:hover {
     height: 6em;
     width: 100%;
     background-color: #256491;
-    border-radius: 10px;
+    border-radius: 5px;
     cursor: pointer;
     -webkit-box-shadow: 2px 2px 2px 0 #d0d0d0;
     box-shadow: 2px 2px 2px 0 #d0d0d0;
@@ -353,6 +353,10 @@ a.dropdown-item:hover {
     background-color: #4c89b5;
     -webkit-box-shadow: 2px 2px 2px 0 #c0c0c0;
     box-shadow: 2px 2px 2px 0 #c0c0c0;
+}
+
+.board-list-item:hover > .board-icons {
+    display: block;
 }
 
 .board-list-item-new:hover {
@@ -380,7 +384,6 @@ a.dropdown-item:hover {
     color: #fff;
     font-weight: 700;
 }
-
 
 .nav-board-title {
     position: absolute;
@@ -412,6 +415,40 @@ a.dropdown-item:hover {
 
 .board-new {
     color: #677d89;
+}
+
+.board-icons {
+    position: relative;
+    display: none;
+    float: right;
+}
+
+.board-icon-delete {
+    position: absolute;
+    color: #c25555;
+    width: 20px;
+    height: 20px;
+    right: 10px;
+    top: 5px;
+    border-radius: 3px;
+}
+
+.board-icon-delete > span {
+    width: 100%;
+    height: 100%;
+    line-height: 18px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.board-icon-delete:hover {
+    background-color: #c25555;
+    color: #fff;
+}
+
+.board-icon-delete:active {
+    background-color: #fff;
+    color: #c25555;
 }
 
 /* Board stylings */

@@ -58,5 +58,21 @@ namespace Ollert.Logic.Repositories
                 return 0;
             }
         }
+
+        public bool RemoveBoard(int id)
+        {
+            var category = GetAll().FirstOrDefault(x => x.Boards.Any(b => b.Id == id));
+            var toDelete = category?.Boards.FirstOrDefault(x => x.Id == id);
+
+            if (category == null || toDelete == null)
+            {
+                return false;
+            }
+
+            category.Boards.Remove(toDelete);
+            Save(category);
+
+            return true;
+        }
     }
 }

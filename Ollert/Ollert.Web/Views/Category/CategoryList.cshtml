@@ -3,6 +3,7 @@
 @section Scripts {
 
     <script type="text/javascript" src="~/js/categoryFunctions.js"></script>
+    <script type="text/javascript" src="~/js/boardFunctions.js"></script>
 
 }
 
@@ -22,7 +23,12 @@
                     @foreach (var board in category.Boards)
                     {
                         <li>
-                            <div class="board-list-item user-select-none">
+                            <div class="board-list-item user-select-none" data-id="@board.Id">
+                                <div class="board-icons">
+                                    <div class="board-icon-delete" onclick="removeBoard(this)">
+                                        <span class="fas fa-times"></span>
+                                    </div>
+                                </div>
                                 <a href="@Url.Action(nameof(BoardController.Board), "Board", new { id = board.Id })">
                                     <div class="board-title">
                                         @board.Name

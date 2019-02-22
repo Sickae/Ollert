@@ -77,5 +77,13 @@ namespace Ollert.Web.Controllers
                 });
             }
         }
+
+        public IActionResult RemoveBoard(int id)
+        {
+            return Json(new
+            {
+                success = _categoryRepository.RemoveBoard(id)
+            });
+        }
     }
 }

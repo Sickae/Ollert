@@ -52,3 +52,16 @@ function createBoard(categoryId, name) {
         }
     })
 }
+
+function removeBoard(caller) {
+    var board = $(caller).closest('.board-list-item');
+    var id = board.data('id');
+
+    $.post('../../Category/RemoveBoard', {
+        id
+    }).done(function (data) {
+        if (data.success) {
+            board.closest('li').remove();
+        }
+    });
+}
