@@ -49,7 +49,8 @@ namespace Ollert.Logic.Repositories
                 }
 
                 board.CardLists.Add(cardList);
-                return Save(board);
+                Save(board);
+                return cardList.Id;
             }
 
             return 0;
