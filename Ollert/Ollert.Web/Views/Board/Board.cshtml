@@ -70,12 +70,6 @@
                             </a>
                         </div>
                         <div class="cardlist-card-content">
-                            @foreach (var label in card.Labels)
-                            {
-                                <div class="cardlist-card-label-container">
-                                    <div class="cardlist-card-label" style="background-color: @label.Color"></div>
-                                </div>
-                            }
                             <div class="cardlist-card-name">@card.Name</div>
                             @{ var displayDesc = card.Description?.Length > 0 ? "initial" : "none"; }
                             <div class="cardlist-card-icon cardlist-card-icon-description" style="display: @displayDesc">

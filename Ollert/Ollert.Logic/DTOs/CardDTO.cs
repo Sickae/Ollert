@@ -8,8 +8,6 @@ namespace Ollert.Logic.DTOs
 
         public string Description { get; set; }
 
-        public IList<LabelDTO> Labels { get; set; }
-
         public IList<CommentDTO> Comments { get; set; }
     }
 }

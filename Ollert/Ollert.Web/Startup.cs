@@ -42,7 +42,6 @@ namespace Ollert
             services.AddScoped<ICardListManager, CardListManager>();
             services.AddScoped<ICardManager, CardManager>();
             services.AddScoped<ICommentManager, CommentManager>();
-            services.AddScoped<ILabelManager, LabelManager>();
             services.AddScoped<ICategoryManager, CategoryManager>();
 
             // repository osztályok

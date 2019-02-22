@@ -10,8 +10,6 @@ namespace Ollert.DataAccess.Entitites
         [MaxLength]
         public virtual string Description { get; set; }
 
-        public virtual IEnumerable<Label> Labels { get; set; }
-
         public virtual IEnumerable<Comment> Comments { get; set; }
     }
 }

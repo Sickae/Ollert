@@ -724,17 +724,6 @@ a.dropdown-item:hover {
     background-color: #e8e8e8;
 }
 
-.cardlist-card-label-container {
-    width: 100%;
-}
-
-.cardlist-card-label {
-    display: inline-block;
-    height: 10px;
-    width: 40px;
-    border-radius: 10px;
-}
-
 .cardlist-new-input-container {
     position: absolute;
     width: 250px;

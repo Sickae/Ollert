@@ -39,8 +39,7 @@ namespace Ollert.Logic.Repositories
                 {
                     Name = cardName,
                     Description = "",
-                    Comments = new List<CommentDTO>(),
-                    Labels = new List<LabelDTO>()
+                    Comments = new List<CommentDTO>()
                 };
 
                 var cardList = Get(cardListId);
