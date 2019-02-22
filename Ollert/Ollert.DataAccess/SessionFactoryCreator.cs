@@ -54,18 +54,10 @@ namespace Ollert.DataAccess
                     .IgnoreBase<Entity>()
                     .Conventions.Add<CustomTableNameConvention>()
                     .Conventions.Add<CustomPropertyConvention>()
-                    .Conventions.Add<FormulaConvention>()
                     .Conventions.Add<MaxLengthConvention>()
-                    .Conventions.Add<UniqueConvention>()
-                    .Conventions.Add<NotNullConvention>()
-                    .Conventions.Add<DateConvention>()
                     .Conventions.Add<CustomHasManyConvention>()
-                    .Conventions.Add<CustomHasManyToManyConvention>()
                     .Conventions.Add<CustomReferenceConvention>()
                     .Conventions.Add<PrimaryKeySequenceConvention>()
-                    .Conventions.Add<EnumConvention>()
-                    .OverrideAll(DropPropertiesWithoutSetter)
-                    .OverrideAll(DropProperties<IgnoreAttribute>)
             ));
 
             var cfg = config.BuildConfiguration();
@@ -78,11 +70,6 @@ namespace Ollert.DataAccess
 
         private class StoreConfiguration : DefaultAutomappingConfiguration
         {
-            public override bool IsComponent(Type type)
-            {
-                return Attribute.IsDefined(type, typeof(ComponentTypeAttribute));
-            }
-
             public override bool ShouldMap(Type type)
             {
                 return type.IsSubclassOf(typeof(Entity));
@@ -154,19 +141,6 @@ namespace Ollert.DataAccess
         }
 
         /// <summary>
-        /// Számított propertykhez konvenció (pl. életkor)
-        /// </summary>
-        private class FormulaConvention : AttributePropertyConvention<FormulaAttribute>
-        {
-            protected override void Apply(FormulaAttribute attribute, IPropertyInstance instance)
-            {
-                var args = attribute.FormulaArgs.Select(CustomPropertyConvention.ConvertToCustomName).ToArray<object>();
-                var formula = string.Format(attribute.Formula, args);
-                instance.Formula(formula);
-            }
-        }
-
-        /// <summary>
         /// Meghatározott méretű adatmezőkhöz konvenció
         /// </summary>
         private class MaxLengthConvention : AttributePropertyConvention<MaxLengthAttribute>
@@ -183,39 +157,6 @@ namespace Ollert.DataAccess
                 {
                     instance.Length(maxLength);
                 }
-            }
-        }
-
-        /// <summary>
-        /// Egyedi property konvenció
-        /// </summary>
-        private class UniqueConvention : AttributePropertyConvention<UniqueAttribute>
-        {
-            protected override void Apply(UniqueAttribute attribute, IPropertyInstance instance)
-            {
-                instance.Unique();
-            }
-        }
-
-        /// <summary>
-        /// Not null konvenció
-        /// </summary>
-        private class NotNullConvention : AttributePropertyConvention<NotNullAttribute>
-        {
-            protected override void Apply(NotNullAttribute attribute, IPropertyInstance instance)
-            {
-                instance.Not.Nullable();
-            }
-        }
-
-        /// <summary>
-        /// Csak évszámot tartalmazó DateTime típusokhoz konvenció
-        /// </summary>
-        private class DateConvention : AttributePropertyConvention<DateAttribute>
-        {
-            protected override void Apply(DateAttribute attribute, IPropertyInstance instance)
-            {
-                instance.CustomSqlType("date");
             }
         }
 
@@ -250,34 +191,6 @@ namespace Ollert.DataAccess
         }
 
         /// <summary>
-        /// N:M kapcsolatokhoz konvenció
-        /// </summary>
-        private class CustomHasManyToManyConvention : IHasManyToManyConvention
-        {
-            public void Apply(IManyToManyCollectionInstance instance)
-            {
-                var memberName = ConvertName(instance.Member.Name);
-                var entityName = ConvertName(instance.EntityType.Name);
-                var childTypeName = ConvertName(instance.ChildType.Name);
-
-                var tableName = string.CompareOrdinal(entityName, childTypeName) < 0
-                    ? string.Format(CultureInfo.InvariantCulture, "{0}_{1}", entityName, childTypeName)
-                    : string.Format(CultureInfo.InvariantCulture, "{0}_{1}", childTypeName, entityName);
-
-                var keyName = string.Format(CultureInfo.InvariantCulture, "fk_{0}_{1}", memberName, entityName);
-                var otherKeyName = string.Format(CultureInfo.InvariantCulture, "fk_{0}_{1}", entityName, memberName);
-                var columnName = string.Format(CultureInfo.InvariantCulture, "{0}_id", entityName);
-                var otherColumnName = string.Format(CultureInfo.InvariantCulture, "{0}_id", childTypeName);
-
-                instance.Table(tableName);
-                instance.Key.Column(columnName);
-                instance.Key.ForeignKey(keyName);
-                instance.Relationship.Column(otherColumnName);
-                instance.Relationship.ForeignKey(otherKeyName);
-            }
-        }
-
-        /// <summary>
         /// Elsődleges kulcsok generálásához konvenció
         /// </summary>
         private class PrimaryKeySequenceConvention : IIdConvention
@@ -290,39 +203,6 @@ namespace Ollert.DataAccess
                 instance.GeneratedBy.Native(sequenceName);
                 instance.Column(columnName);
             }
-        }
-
-        /// <summary>
-        /// Enumokhoz konvenció
-        /// </summary>
-        private class EnumConvention : IUserTypeConvention
-        {
-            public void Apply(IPropertyInstance instance)
-            {
-                instance.CustomType(instance.Property.PropertyType);
-            }
-
-            public void Accept(IAcceptanceCriteria<IPropertyInspector> criteria)
-            {
-                criteria.Expect(x => x.Property.PropertyType.IsEnum || x.Property.PropertyType.IsNullableEnum());
-            }
-        }
-
-
-        /// <summary>
-        /// Setter nélküli propertykat dobja el
-        /// </summary>
-        private static void DropPropertiesWithoutSetter(IPropertyIgnorer ignorer)
-        {
-            ignorer.IgnoreProperties(x => !x.CanWrite);
-        }
-
-        /// <summary>
-        /// T attribútummal rendelkező propertykat dobja el
-        /// </summary>
-        private static void DropProperties<T>(IPropertyIgnorer ignorer) where T : Attribute
-        {
-            ignorer.IgnoreProperties(x => Attribute.IsDefined(x.MemberInfo, typeof(T)));
         }
 
         private static void ExportScripts(Configuration config, FluentConfiguration database)

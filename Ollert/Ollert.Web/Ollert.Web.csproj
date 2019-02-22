@@ -16,10 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Helpers\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Ollert.DataAccess\Ollert.DataAccess.csproj" />
     <ProjectReference Include="..\Ollert.Logic\Ollert.Logic.csproj" />
   </ItemGroup>
