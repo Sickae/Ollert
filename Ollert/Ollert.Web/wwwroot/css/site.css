@@ -125,6 +125,10 @@ html {
 
 /* General */
 
+a:hover {
+    text-decoration: none !important;
+}
+
 .templates {
     display: none;
 }
@@ -185,10 +189,22 @@ input::placeholder {
     border: none;
     text-align: left;
     background-color: #fff;
+    text-decoration: none;
+}
+
+a.dropdown-item {
+    color: #17394d !important;
+    font-weight: 700;
+    line-height: 2em;
+    vertical-align: middle;
 }
 
 .dropdown-item:hover {
     background-color: #f0f0f0;
+}
+
+a.dropdown-item:hover {
+    color: #17394d;
 }
 
 .dropdown-divider {
@@ -207,6 +223,11 @@ input::placeholder {
     color: #17394d;
     font-weight: 400;
     text-align: left;
+}
+
+.nav .dropdown.open > a {
+    background-color: #59aae5 !important;
+    border-color: transparent;
 }
 
 /* BoardList stylings */

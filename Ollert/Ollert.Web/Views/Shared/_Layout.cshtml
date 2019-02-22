@@ -1,4 +1,5 @@
 ﻿@using Ollert.Web.Controllers
+@using Ollert.Logic.DTOs
 
 <!DOCTYPE html>
 <html>
@@ -39,10 +40,20 @@
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li class="nav-item">
-                    <a class="btn btn-nav-item" href="@Url.Action(nameof(BoardController.New), "Board")">
-                        <span class="nav-icon fas fa-plus"></span>
-                        Új tábla
-                    </a>
+                    <div class="dropdown">
+                        <a class="btn btn-nav-item dropdown-toggle" data-toggle="dropdown">
+                            <span class="nav-icon fas fa-plus"></span>
+                            Új tábla
+                        </a>
+                        <div class="dropdown-menu">
+                            <div class="dropdown-header user-select-none">Kategória Kiválasztása</div>
+                            <div class="dropdown-divider"></div>
+                            @foreach (var category in ViewBag.Categories as List<CategoryDTO>)
+                            {
+                                <a class="dropdown-item" href="@Url.Action(nameof(BoardController.New), "Board", new { categoryId = category.Id })">@category.Name</a>
+                            }
+                        </div>
+                    </div>
                 </li>
             </ul>
         </div>

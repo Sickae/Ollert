@@ -10,12 +10,10 @@ namespace Ollert.Web.Controllers
     public class BoardController : ControllerBase
     {
         private readonly BoardRepository _boardRepository;
-        private readonly ICategoryManager _categoryManager;
 
-        public BoardController(BoardRepository boardRepository, ICategoryManager categoryManager)
+        public BoardController(BoardRepository boardRepository, ICategoryManager categoryManager) : base(categoryManager)
         {
             _boardRepository = boardRepository;
-            _categoryManager = categoryManager;
         }
 
         public IActionResult New(int categoryId)
@@ -38,6 +36,7 @@ namespace Ollert.Web.Controllers
         private IActionResult Board(BoardViewModel model)
         {
             SetTitle(model.Name);
+            FillViewBags();
             return View(nameof(Board), model);
         }
 

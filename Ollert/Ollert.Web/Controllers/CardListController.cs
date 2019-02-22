@@ -1,8 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Ollert.Logic.DTOs;
 using Ollert.Logic.Repositories;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Ollert.Web.Controllers
 {

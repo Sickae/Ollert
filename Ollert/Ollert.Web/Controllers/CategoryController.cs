@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Ollert.Logic.Managers.Interfaces;
 using Ollert.Logic.Repositories;
 using Ollert.Web.Models;
 
@@ -8,7 +9,7 @@ namespace Ollert.Web.Controllers
     {
         private readonly CategoryRepository _categoryRepository;
 
-        public CategoryController(CategoryRepository categoryRepository)
+        public CategoryController(CategoryRepository categoryRepository, ICategoryManager categoryManager) : base(categoryManager)
         {
             _categoryRepository = categoryRepository;
         }
@@ -18,6 +19,7 @@ namespace Ollert.Web.Controllers
             var categories = _categoryRepository.GetAll();
             var vm = new CategoryListViewModel { Categories = categories };
             SetTitle("Táblák");
+            FillViewBags();
             return View(vm);
         }
 
