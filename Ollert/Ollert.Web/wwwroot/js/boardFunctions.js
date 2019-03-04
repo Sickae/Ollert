@@ -6,9 +6,14 @@
 // Tábla átnevezése cím mező fókusz elvesztésekor
 $(document).on('blur', '.nav-board-title', function () {
     var title = $(this).val();
+    var boardId = $('#Id').val();
 
     if (title.length === 0) {
-        $(this).val($(this).data('name'));
+        if (boardId > 0) {
+            $(this).val($(this).data('name'));            
+        } else {
+            $(this).focus();
+        }
     } else {
         var boardId = $('#Id').val();
 

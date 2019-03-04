@@ -406,7 +406,8 @@ a.dropdown-item:hover {
     z-index: 1050;
 }
 
-.nav-board-title:focus {
+.nav-board-title:focus,
+.nav-board-title:empty {
     color: #17394d;
     background-color: #fff;
     border: 2px solid #59aae5;

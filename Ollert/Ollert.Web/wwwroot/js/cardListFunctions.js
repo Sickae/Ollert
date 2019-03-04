@@ -56,21 +56,23 @@ function addNewCardList() {
     var inputContainer = $('.cardlist-new-input-container').closest('.cardlist-container');
     var title = inputContainer.find('input.cardlist-new-input').val();
 
-    emptyList.find('.cardlist-title').val(title);
-    inputContainer.find('.cardlist-new').show();
-    inputContainer.find('.cardlist-new-input-container').hide();
-    $('.cardlist-list').append(emptyList).append(inputContainer);
+    if (title.length > 0) {
+        emptyList.find('.cardlist-title').val(title);
+        inputContainer.find('.cardlist-new').show();
+        inputContainer.find('.cardlist-new-input-container').hide();
+        $('.cardlist-list').append(emptyList).append(inputContainer);
 
-    $.post('../../Board/AddNewCardList', {
-        boardId: boardId,
-        cardListName: title
-    }).done(function (data) {
-        if (data.success) {
-            var id = data.id;
-            emptyList.attr('data-id', id);
-            emptyList.find('.cardlist-title').attr('data-title', data.name);
-        }
-    });
+        $.post('../../Board/AddNewCardList', {
+            boardId: boardId,
+            cardListName: title
+        }).done(function (data) {
+            if (data.success) {
+                var id = data.id;
+                emptyList.attr('data-id', id);
+                emptyList.find('.cardlist-title').attr('data-title', data.name);
+            }
+        });
+    }
 }
 
 // Lista átnevezése

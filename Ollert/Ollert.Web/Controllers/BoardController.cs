@@ -26,6 +26,7 @@ namespace Ollert.Web.Controllers
             return Board(vm);
         }
 
+        [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
         public IActionResult Board(int id)
         {
             var board = _boardRepository.Get(id);
@@ -41,7 +42,7 @@ namespace Ollert.Web.Controllers
 
         private IActionResult Board(BoardViewModel model)
         {
-            SetTitle(model.Name);
+            SetTitle(string.IsNullOrEmpty(model.Name) ? "Új tábla" : model.Name);
             FillViewBags();
             return View(nameof(Board), model);
         }

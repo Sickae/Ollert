@@ -87,6 +87,7 @@ function addNewCategory() {
             categoryNewContainer.find('.category-new-input-container').hide();
             emptyCategoryContainer.find('.category').attr('data-id', data.id);
             emptyCategoryContainer.find('.category-name').val(name).attr('data-name', name);
+            emptyCategoryContainer.find('.board-list-item-new > a').attr('href', '../../Board/New?categoryId=' + data.id);
 
             $('.board-list').append(emptyCategoryContainer).append(categoryNewContainer);
         }
